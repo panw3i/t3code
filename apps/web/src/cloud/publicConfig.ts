@@ -76,7 +76,11 @@ export function resolveRelayTracingConfig() {
     : null;
 }
 
+const FORK_DISABLES_T3_CONNECT = true;
+
 export function hasCloudPublicConfig(): boolean {
+  // Fork (server + web): T3 Connect is removed, so cloud features never activate.
+  if (FORK_DISABLES_T3_CONNECT) return false;
   const config = resolveCloudPublicConfig();
   if (!config.clerkPublishableKey || !config.clerkJwtTemplate || !config.relayUrl) {
     return false;

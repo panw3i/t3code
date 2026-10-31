@@ -1,0 +1,63 @@
+# 本 fork 只保留 server + web，以下路径在每次同步上游后都会被删除。
+# 支持 git pathspec（glob 用 :(glob) 前缀）。
+
+# 桌面端 / 移动端 / 营销站
+apps/desktop
+apps/mobile
+apps/marketing
+native/browser-secret
+native/hyprland-snap-shot
+native/kde-snap-shot
+packaging/aur
+.agents/skills/test-t3-mobile
+
+# T3 Connect（云端 relay + Clerk）
+infra/relay
+docs/internals/t3-connect.md
+docs/operations/connect-setup.md
+docs/operations/relay-observability.md
+docs/user/t3-connect-troubleshooting.md
+
+# 桌面/移动相关脚本
+scripts/release-smoke.ts
+scripts/build-desktop-artifact.ts
+scripts/build-desktop-artifact.test.ts
+scripts/build-cli-archive.ts
+scripts/smoke-cli-archive.ts
+scripts/smoke-desktop-app.ts
+scripts/verify-windows-desktop-artifact.ts
+scripts/sign-macos.ts
+scripts/mock-update-server.ts
+scripts/mock-update-server.test.ts
+scripts/merge-update-manifests.ts
+scripts/merge-update-manifests.test.ts
+scripts/export-android-icons.ts
+scripts/convert-device-model.py
+scripts/mobile-behavior
+scripts/mobile-e2e
+scripts/mobile-behavior.ts
+scripts/mobile-e2e.ts
+scripts/mobile-native-client.ts
+scripts/mobile-native-client.test.ts
+scripts/mobile-native-static-check.ts
+scripts/mobile-native-static-check.test.ts
+scripts/mobile-showcase.ts
+scripts/mobile-showcase.test.ts
+scripts/mobile-showcase.config.ts
+scripts/mobile-showcase-environment.ts
+docs/operations/mobile-app-store-screenshots.md
+docs/operations/android-notifications.md
+
+# 上游 CI/发布工作流全部移除，fork 只用 .github/workflows/fork-*.yml
+:(glob).github/workflows/[!f]*.yml
+.github/scripts/mirror-play-apk.cjs
+.github/scripts/relay-state-output.test.cjs
+.github/scripts/stage-preview-bundle.py
+.github/scripts/stage-preview-bundle.test.py
+
+# 发布流程专用（随上游 CI 一并移除后变为孤立文件）
+apps/web/scripts/verify-built-boot.ts
+scripts/lib/desktop-external-packages.ts
+scripts/lib/update-manifest.ts
+scripts/lib/windows-jsign.ts
+scripts/resolve-nightly-release.ts
