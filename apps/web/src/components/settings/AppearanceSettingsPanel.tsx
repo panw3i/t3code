@@ -35,6 +35,13 @@ import { AdvancedSettings } from "./AdvancedSettings";
 import { PanelAnimationsPreview } from "./PanelAnimationsPreview";
 import { TypographySection } from "./TypographySettings";
 import { ThreadDetailsItemsRow } from "./ThreadDetailsItemsRow";
+import {
+  getLocalePreference,
+  LOCALE_PREFERENCES,
+  type LocalePreference,
+  setLocalePreference,
+  t,
+} from "~/i18n";
 
 const ENVIRONMENT_IDENTIFICATION_LABELS: Record<EnvironmentIdentificationMode, string> = {
   artwork: "Artwork",
@@ -71,6 +78,13 @@ function environmentIdentificationOptions(
     ["dev-artwork", "Dev artwork"],
   ];
 }
+
+// Language names stay in their own language so either locale can find its way back.
+const LOCALE_PREFERENCE_LABELS: Record<LocalePreference, string> = {
+  system: t("System"),
+  en: "English",
+  "zh-CN": "简体中文",
+};
 
 const CHAT_WIDTH_LABELS: Record<ChatWidth, string> = {
   comfortable: "Comfortable",
@@ -269,6 +283,32 @@ export function AppearanceSettingsPanel() {
                   <SelectItem value="comfortable">Comfortable (default)</SelectItem>
                   <SelectItem value="wide">Wide</SelectItem>
                   <SelectItem value="full">Full</SelectItem>
+                </SelectPopup>
+              </Select>
+            </div>
+          }
+        />
+        <SettingsRow
+          {...searchableSetting("language")}
+          description={t("Choose the interface language. The page reloads to apply it.")}
+          control={
+            <div className="w-full sm:w-40">
+              <Select
+                value={getLocalePreference()}
+                onValueChange={(value) => {
+                  if (value === "system" || value === "en" || value === "zh-CN")
+                    setLocalePreference(value);
+                }}
+              >
+                <SelectTrigger size="sm" className="w-full min-w-0" aria-label={t("Language")}>
+                  <SelectValue>{LOCALE_PREFERENCE_LABELS[getLocalePreference()]}</SelectValue>
+                </SelectTrigger>
+                <SelectPopup align="end" alignItemWithTrigger={false}>
+                  {LOCALE_PREFERENCES.map((preference) => (
+                    <SelectItem key={preference} value={preference}>
+                      {LOCALE_PREFERENCE_LABELS[preference]}
+                    </SelectItem>
+                  ))}
                 </SelectPopup>
               </Select>
             </div>

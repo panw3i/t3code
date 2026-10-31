@@ -1,4 +1,5 @@
 import { HOSTED_APP_CHANNEL } from "~/branding";
+import { t } from "~/i18n";
 import { isElectron, isSecretsFeatureEnabled } from "~/env";
 import { isMacPlatform, isWindowsPlatform, normalizeSearchText } from "~/lib/utils";
 import { STATIC_KEYBINDING_COMMANDS, type KeybindingCommand } from "@t3tools/contracts";
@@ -318,6 +319,12 @@ export const SETTINGS_SEARCH_ITEMS = [
     title: "Diff colors",
     to: "/settings/diffs",
     searchTerms: ["red green blue orange additions deletions changes counts palette colorblind"],
+  },
+  {
+    id: "language",
+    title: t("Language"),
+    to: "/settings/appearance",
+    searchTerms: ["language locale chinese english 语言 中文 简体 英文 i18n"],
   },
   {
     id: "chat-width",
