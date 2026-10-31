@@ -17,7 +17,7 @@ fi
 git fetch --no-tags upstream main
 
 if git merge-base --is-ancestor "$UPSTREAM_REF" HEAD; then
-  echo "已是最新：$UPSTREAM_REF 已包含在当前分支中。"
+  echo "已是最新：${UPSTREAM_REF} 已包含在当前分支中。"
   exit 0
 fi
 
@@ -37,7 +37,7 @@ unresolved="$(git diff --name-only --diff-filter=U | sort -u)"
 if [ -n "$unresolved" ]; then
   printf '%s\n' "$unresolved" > "$CONFLICTS_FILE"
   git merge --abort
-  echo "合并 $UPSTREAM_REF ($upstream_sha) 存在需要人工处理的冲突：" >&2
+  echo "合并 ${UPSTREAM_REF} (${upstream_sha}) 存在需要人工处理的冲突：" >&2
   printf '  %s\n' $unresolved >&2
   exit 2
 fi
@@ -49,4 +49,4 @@ if $lockfile_conflicted || ! git diff --cached --quiet -- pnpm-lock.yaml '**/pac
 fi
 
 git commit --no-verify -q -m "chore(sync): 合并上游 pingdotgg/t3code@$upstream_sha"
-echo "已合并上游 $upstream_sha。"
+echo "已合并上游 ${upstream_sha}。"
