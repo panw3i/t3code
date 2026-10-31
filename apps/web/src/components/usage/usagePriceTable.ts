@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import {
   parseUsagePriceForm,
   usagePriceForm,
@@ -57,7 +58,7 @@ export function usagePriceCell(
   if (values.some((value) => value !== values[0])) return { value: "", placeholder: "Mixed" };
   return {
     value: values[0] ?? "",
-    placeholder: values[0] === null ? "Automatic" : optional ? "Input rate" : "0.00",
+    placeholder: values[0] === null ? t("Automatic") : optional ? t("Input rate") : "0.00",
   };
 }
 
@@ -85,8 +86,8 @@ export function usagePriceTableChanges(
         );
         continue;
       }
-      if (model === "") errors.set(draft.id, "Enter a model ID.");
-      else if (alias === model) errors.set(draft.id, "Map to a different model.");
+      if (model === "") errors.set(draft.id, t("Enter a model ID."));
+      else if (alias === model) errors.set(draft.id, t("Map to a different model."));
       else {
         if (alias !== currentAlias) changes.push({ model, alias });
         if (modelPrice(target, model)) changes.push({ model, price: null });
@@ -111,10 +112,10 @@ export function usagePriceTableChanges(
       errors.set(
         draft.id,
         model === ""
-          ? "Enter a model ID."
+          ? t("Enter a model ID.")
           : missing
             ? `${missing.label} is required on ${target.label}.`
-            : "Use non-negative numbers for prices.",
+            : t("Use non-negative numbers for prices."),
       );
       continue;
     }

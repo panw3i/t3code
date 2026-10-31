@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { useEffect, useImperativeHandle, useRef, useState, type RefObject } from "react";
 import { parseDelimitedPreview } from "@t3tools/shared/delimitedPreview";
 import { formatAttachmentSize } from "@t3tools/client-runtime/state/attachments";
@@ -128,7 +129,7 @@ export default function LargeTextViewer(props: {
       engine.addEventListener("error", () => {
         copyPending.current?.reject(new Error("The text viewer stopped."));
         copyPending.current = null;
-        setError("Could not load the text viewer. Close the file and try again.");
+        setError(t("Could not load the text viewer. Close the file and try again."));
       });
       engine.postMessage(
         {
@@ -225,7 +226,7 @@ export default function LargeTextViewer(props: {
       </div>
       {!meta.complete ? (
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
-          <FileSurfaceNotice>Loading the rest of the file…</FileSurfaceNotice>
+          <FileSurfaceNotice>{t("Loading the rest of the file…")}</FileSurfaceNotice>
         </div>
       ) : null}
       {meta.columns === 1024 ? (

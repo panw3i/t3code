@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { useStableCallback } from "~/hooks/useStableCallback";
 import type { OfficePreviewKind } from "@t3tools/shared/filePreview";
 import { lazy, Suspense, useEffect, useState } from "react";
@@ -14,7 +15,7 @@ async function readOfficeFile(src: string, signal: AbortSignal) {
   const response = await fetch(src, { signal });
   if (!response.ok) throw new Error("The file could not be loaded. Close it and try again.");
   if (Number(response.headers.get("content-length")) > OFFICE_PREVIEW_MAX_BYTES)
-    throw new Error("Preview limited to files under 50 MB.");
+    throw new Error(t("Preview limited to files under 50 MB."));
   const reader = response.body?.getReader();
   if (!reader) throw new Error("The file is unavailable.");
   const chunks: Uint8Array<ArrayBuffer>[] = [];
@@ -24,7 +25,8 @@ async function readOfficeFile(src: string, signal: AbortSignal) {
       const { value, done } = await reader.read();
       if (done) break;
       size += value.length;
-      if (size > OFFICE_PREVIEW_MAX_BYTES) throw new Error("Preview limited to files under 50 MB.");
+      if (size > OFFICE_PREVIEW_MAX_BYTES)
+        throw new Error(t("Preview limited to files under 50 MB."));
       chunks.push(value);
     }
   } finally {
@@ -43,14 +45,14 @@ export default function OfficeViewer(props: {
   const [prepared, setPrepared] = useState<Extract<OfficeWorkerResult, { bytes: ArrayBuffer }>>();
   const [details, setDetails] = useState("");
   const fail = useStableCallback((cause: unknown) =>
-    setError(cause instanceof Error ? cause.message : "Could not render this Office document."),
+    setError(cause instanceof Error ? cause.message : t("Could not render this Office document.")),
   );
   // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- Own the Open XML fetch, preparation worker, and timeout for this source and release them on cleanup.
   useEffect(() => {
     if ((props.sizeBytes ?? 0) > OFFICE_PREVIEW_MAX_BYTES) {
       // Metadata bounds are checked before fetching or starting an engine.
       // oxlint-disable-next-line react/set-state-in-effect
-      setError("Preview limited to files under 50 MB.");
+      setError(t("Preview limited to files under 50 MB."));
       return;
     }
     const controller = new AbortController();
@@ -97,7 +99,7 @@ export default function OfficeViewer(props: {
         role="alert"
         className="flex min-h-0 flex-1 flex-col items-center justify-center gap-1 px-6 text-center"
       >
-        <p className="text-sm font-medium">No preview for this file</p>
+        <p className="text-sm font-medium">{t("No preview for this file")}</p>
         <p className="max-w-sm text-xs leading-relaxed text-muted-foreground">
           {error} Save it or open it in another app.
         </p>

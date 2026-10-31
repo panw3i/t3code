@@ -1,4 +1,5 @@
 /* oxlint-disable react/no-unstable-nested-components -- These callbacks return overlays, and are invoked as render functions. */
+import { t } from "~/i18n";
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import {
@@ -100,7 +101,7 @@ export default function Presentation(props: {
     <div className="flex min-h-0 flex-1 flex-col">
       <div className={FILE_SURFACE_SUBHEADER_CLASS}>
         <FileSurfaceAction
-          label="Previous slide"
+          label={t("Previous slide")}
           disabled={page === 0}
           onPress={() => select(page - 1)}
         >
@@ -110,7 +111,7 @@ export default function Presentation(props: {
           Slide {page + 1} of {opened.slides.length}
         </span>
         <FileSurfaceAction
-          label="Next slide"
+          label={t("Next slide")}
           disabled={page + 1 === opened.slides.length}
           onPress={() => select(page + 1)}
         >
@@ -120,7 +121,7 @@ export default function Presentation(props: {
       <OfficePages
         pages={opened.slides}
         paint={opened.paint}
-        label="Slide"
+        label={t("Slide")}
         scrollRef={scroll}
         onPageChange={setPage}
         onError={onError}
@@ -143,11 +144,11 @@ export default function Presentation(props: {
           const slide = opened.slides[index];
           return slide?.notes || slide?.hidden ? (
             <div className="space-y-1 text-xs text-muted-foreground">
-              {slide.hidden ? <p>Hidden slide</p> : null}
+              {slide.hidden ? <p>{t("Hidden slide")}</p> : null}
               {slide.notes ? (
                 <p
                   role="note"
-                  aria-label="Speaker notes"
+                  aria-label={t("Speaker notes")}
                   className="select-text whitespace-pre-wrap break-words"
                 >
                   {slide.notes}

@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { useEffect, useState } from "react";
 
 import { useTheme } from "~/hooks/useTheme";
@@ -31,7 +32,7 @@ async function readFont(src: string, signal: AbortSignal) {
   return await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.addEventListener("load", () => resolve(String(reader.result)), { once: true });
-    reader.addEventListener("error", () => reject(new Error("The font could not be decoded.")), {
+    reader.addEventListener("error", () => reject(new Error(t("The font could not be decoded."))), {
       once: true,
     });
     reader.readAsDataURL(blob);
@@ -46,7 +47,7 @@ export default function FontViewer(props: { readonly src: string; readonly name:
   useEffect(() => {
     const controller = new AbortController();
     const timeout = setTimeout(() => {
-      setError("The font took too long to load.");
+      setError(t("The font took too long to load."));
       controller.abort();
     }, 30_000);
     void readFont(props.src, controller.signal)
@@ -55,7 +56,9 @@ export default function FontViewer(props: { readonly src: string; readonly name:
       })
       .catch((cause: unknown) => {
         if (!controller.signal.aborted)
-          setError(cause instanceof Error ? cause.message : "The font is damaged or unsupported.");
+          setError(
+            cause instanceof Error ? cause.message : t("The font is damaged or unsupported."),
+          );
       })
       .finally(() => clearTimeout(timeout));
     return () => {
@@ -69,7 +72,7 @@ export default function FontViewer(props: { readonly src: string; readonly name:
         role="alert"
         className="flex min-h-0 flex-1 flex-col items-center justify-center gap-1 px-6 text-center"
       >
-        <p className="text-sm font-medium">No preview for this file</p>
+        <p className="text-sm font-medium">{t("No preview for this file")}</p>
         <p className="max-w-sm text-xs leading-relaxed text-muted-foreground">
           {error} Save it to open in another app.
         </p>

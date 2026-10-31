@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import {
   buildTraitsTriggerDisplay,
   getDescriptorStringValue,
@@ -59,10 +60,10 @@ export function readPromptUltrathink(prompt: string): PromptUltrathink {
 }
 
 const SAVED_OPTION_LABELS: Readonly<Record<string, string>> = {
-  agent: "Agent",
-  effort: "Effort",
-  reasoningEffort: "Reasoning effort",
-  variant: "Reasoning",
+  agent: t("Agent"),
+  effort: t("Effort"),
+  reasoningEffort: t("Reasoning effort"),
+  variant: t("Reasoning"),
 };
 
 function savedOptionLabel(id: string): string {
@@ -107,7 +108,7 @@ type TraitsPersistence =
 function DefaultBadge() {
   return (
     <Badge variant="outline" size="sm" className="min-w-0">
-      Default
+      {t("Default")}
     </Badge>
   );
 }
@@ -498,7 +499,7 @@ export const TraitsMenuContent = memo(function TraitsMenuContentImpl({
                 {(["on", "off"] as const).map((value) => (
                   <MenuRadioItem key={value} value={value} hideIndicator closeOnClick>
                     <span className="flex w-full min-w-0 items-center justify-between gap-3">
-                      <span>{value === "on" ? "On" : "Off"}</span>
+                      <span>{value === "on" ? t("On") : t("Off")}</span>
                     </span>
                   </MenuRadioItem>
                 ))}

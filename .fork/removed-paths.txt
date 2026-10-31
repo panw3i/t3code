@@ -48,8 +48,7 @@ scripts/mobile-showcase-environment.ts
 docs/operations/mobile-app-store-screenshots.md
 docs/operations/android-notifications.md
 
-# 上游 CI/发布工作流全部移除，fork 只用 .github/workflows/fork-*.yml
-:(glob).github/workflows/[!f]*.yml
+# 上游 CI/发布工作流：prune.sh 会删除 .github/workflows 下所有非 fork-* 的文件
 .github/scripts/mirror-play-apk.cjs
 .github/scripts/relay-state-output.test.cjs
 .github/scripts/stage-preview-bundle.py
@@ -61,3 +60,7 @@ scripts/lib/desktop-external-packages.ts
 scripts/lib/update-manifest.ts
 scripts/lib/windows-jsign.ts
 scripts/resolve-nightly-release.ts
+
+# T3 Connect 已关闭，断言其开启的测试
+apps/web/src/cloud/publicConfig.test.ts
+apps/server/src/cloud/ConnectReachability.test.ts

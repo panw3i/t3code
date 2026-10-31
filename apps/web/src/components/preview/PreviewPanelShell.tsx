@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { type CSSProperties, type ReactNode, useLayoutEffect, useRef, useState } from "react";
 import {
   type PreviewPanelInlineSize,
@@ -45,7 +46,7 @@ function ResizablePreviewPanelShell(props: PreviewPanelShellProps) {
 function PreviewPanelShellFrame(
   props: PreviewPanelShellProps & { inlineSize: PreviewPanelInlineSize },
 ) {
-  const panelArea = workspaceAreaProps("panel", 4, props.workspaceLabel ?? "Workspace panel");
+  const panelArea = workspaceAreaProps("panel", 4, props.workspaceLabel ?? t("Workspace panel"));
   const isInline = props.mode === "inline";
   const collapsible = isInline && props.open !== undefined;
   const open = props.open ?? true;

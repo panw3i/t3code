@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { resolvePullRequestDetailChecks } from "@t3tools/client-runtime/pull-request-checks";
 import {
   capitalizeTerm,
@@ -320,8 +321,8 @@ export function ThreadDetailsPrRow({
   const trailingAction =
     rowAction === "resolve"
       ? {
-          label: "Resolve",
-          pendingLabel: "Preparing...",
+          label: t("Resolve"),
+          pendingLabel: t("Preparing..."),
           pending: handoff === "conflicts",
           destructive: true,
           suffix: <ArrowUpRightIcon aria-hidden className="size-3 shrink-0" />,
@@ -330,8 +331,8 @@ export function ThreadDetailsPrRow({
         }
       : rowAction === "ready"
         ? {
-            label: "Ready",
-            pendingLabel: "Marking...",
+            label: t("Ready"),
+            pendingLabel: t("Marking..."),
             pending: actionPending,
             destructive: false,
             suffix: null,
@@ -340,8 +341,8 @@ export function ThreadDetailsPrRow({
           }
         : rowAction === "fix"
           ? {
-              label: "Fix",
-              pendingLabel: "Preparing...",
+              label: t("Fix"),
+              pendingLabel: t("Preparing..."),
               pending: handoff === "findings",
               destructive: true,
               suffix: <ArrowUpRightIcon aria-hidden className="size-3 shrink-0" />,
@@ -350,8 +351,8 @@ export function ThreadDetailsPrRow({
             }
           : rowAction === "merge"
             ? {
-                label: "Merge",
-                pendingLabel: "Merging...",
+                label: t("Merge"),
+                pendingLabel: t("Merging..."),
                 pending: actionPending,
                 destructive: false,
                 suffix: null,
@@ -392,7 +393,7 @@ export function ThreadDetailsPrRow({
         </TooltipTrigger>
         <TooltipPopup side="top">
           Watching: the agent wakes when checks finish, someone comments, or the branch conflicts.
-          Click to stop.
+          {t("Click to stop.")}
         </TooltipPopup>
       </Tooltip>
     ) : null;
@@ -493,7 +494,7 @@ export function ThreadDetailsPrRow({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogClose render={<Button variant="outline" size="sm" />}>
-                Cancel
+                {t("Cancel")}
               </AlertDialogClose>
               <Button
                 size="sm"
@@ -503,7 +504,7 @@ export function ThreadDetailsPrRow({
                   void perform("merge", selectedMergeMethod);
                 }}
               >
-                Merge
+                {t("Merge")}
               </Button>
             </AlertDialogFooter>
           </AlertDialogPopup>

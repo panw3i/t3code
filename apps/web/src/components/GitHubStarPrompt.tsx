@@ -8,6 +8,7 @@ import { readLocalApi } from "../localApi";
 import { appAtomRegistry } from "../rpc/atomRegistry";
 import { sourceControlEnvironment } from "../state/sourceControl";
 import { toastManager } from "./ui/toast";
+import { t } from "~/i18n";
 
 // Separate keys so a count written by another tab can never undo a dismissal.
 const SENT_KEY = "t3code:github-star-prompt:sent";
@@ -27,12 +28,12 @@ function dismiss() {
 function showStarPrompt() {
   const close = () => toastManager.close(id);
   const id = toastManager.add({
-    title: "Enjoying T3 Code?",
-    description: "Give us a star on GitHub to let us know!",
+    title: t("Enjoying T3 Code?"),
+    description: t("Give us a star on GitHub to let us know!"),
     timeout: 0,
     onClose: dismiss,
     actionProps: {
-      children: "Star on GitHub",
+      children: t("Star on GitHub"),
       onClick: () => {
         close();
         void readLocalApi()
@@ -43,7 +44,7 @@ function showStarPrompt() {
     data: {
       actionLayout: "stacked-end",
       leadingIcon: <StarIcon aria-hidden className="size-4 text-warning-foreground" />,
-      secondaryActionProps: { children: "Dismiss", onClick: close },
+      secondaryActionProps: { children: t("Dismiss"), onClick: close },
       secondaryActionVariant: "ghost",
     },
   });

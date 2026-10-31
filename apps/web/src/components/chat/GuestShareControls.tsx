@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { useAtomValue } from "@effect/atom-react";
 import {
   isAtomCommandInterrupted,
@@ -97,7 +98,7 @@ function GuestShareDialog({
     const error = squashAtomCommandFailure(result);
     setState({
       status: "failed",
-      message: error instanceof Error ? error.message : "Could not create a guest link.",
+      message: error instanceof Error ? error.message : t("Could not create a guest link."),
     });
   };
 
@@ -110,7 +111,7 @@ function GuestShareDialog({
     >
       <DialogPopup className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Share with guest</DialogTitle>
+          <DialogTitle>{t("Share with guest")}</DialogTitle>
           <DialogDescription>
             The guest sees the thread as you do, including command output and the agent&apos;s
             reasoning. Each message they send waits for you.
@@ -121,7 +122,7 @@ function GuestShareDialog({
             <div className="flex items-center gap-2">
               <Input
                 readOnly
-                aria-label="Guest link"
+                aria-label={t("Guest link")}
                 value={state.url}
                 onFocus={(event) => event.currentTarget.select()}
               />

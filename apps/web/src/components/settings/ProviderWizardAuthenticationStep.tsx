@@ -8,6 +8,7 @@ import { WizardFooter, WizardPanel } from "../ui/wizard";
 import { ProviderAuthenticationSection } from "./ProviderAuthenticationSection";
 import { SettingsGroup } from "./SettingsGroup";
 import { SettingsRow } from "./settingsLayout";
+import { t } from "~/i18n";
 
 export function ProviderWizardAuthenticationStep({
   environmentId,
@@ -56,18 +57,18 @@ export function ProviderWizardAuthenticationStep({
             />
           ) : (
             <SettingsRow
-              title="Account"
+              title={t("Account")}
               description={
                 isDiscovering
-                  ? "Discovering sign-in methods…"
+                  ? t("Discovering sign-in methods…")
                   : (query.error ??
                     auth?.message ??
-                    "No in-app sign-in advertised. Follow the provider's docs to finish setup.")
+                    t("No in-app sign-in advertised. Follow the provider's docs to finish setup."))
               }
               control={
                 isDiscovering ? (
                   <Button disabled size="sm" variant="outline">
-                    Sign in
+                    {t("Sign in")}
                   </Button>
                 ) : provider?.setup?.documentationUrl ? (
                   <Button
@@ -77,7 +78,7 @@ export function ProviderWizardAuthenticationStep({
                       <a href={provider.setup.documentationUrl} target="_blank" rel="noreferrer" />
                     }
                   >
-                    Open docs
+                    {t("Open docs")}
                   </Button>
                 ) : undefined
               }
@@ -92,7 +93,7 @@ export function ProviderWizardAuthenticationStep({
           disabled={active}
           onClick={onFinish}
         >
-          {signedIn ? "Done" : "Skip for now"}
+          {signedIn ? t("Done") : t("Skip for now")}
         </Button>
       </WizardFooter>
     </>

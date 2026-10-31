@@ -19,6 +19,7 @@ import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "../ui/collaps
 import { MiddleTruncate } from "../ui/middle-truncate";
 import { ScrollArea } from "../ui/scroll-area";
 import type { RestartingMachine, UpdateEverythingRow } from "./updateEverything.logic";
+import { t, tPlural } from "~/i18n";
 
 const isRunning = (status: string) =>
   status === "preparing" || status === "starting" || status === "running";
@@ -85,9 +86,9 @@ export function UpdateEverythingDialog({
 }
 
 const APP_LABELS = {
-  "this-app": "This app",
-  server: "Server",
-  "desktop-app": "Desktop app",
+  "this-app": t("This app"),
+  server: t("Server"),
+  "desktop-app": t("Desktop app"),
 } as const;
 
 function UpdateEverythingDialogContent({
@@ -98,7 +99,7 @@ function UpdateEverythingDialogContent({
   onConfirm,
   cancelRef,
   title,
-  confirmLabel = "Update",
+  confirmLabel = t("Update"),
   notes = [],
   disabledReason = null,
   busy = false,
@@ -120,7 +121,7 @@ function UpdateEverythingDialogContent({
     ),
   );
   const running = stopped + continuing;
-  const threads = `${running} running ${running === 1 ? "thread" : "threads"}`;
+  const threads = tPlural(running, "{count} running thread", "{count} running threads");
   const restarting = new Set(restarts.map((machine) => machine.environmentId));
   const updating = rows.filter((row) => row.app !== null || row.providers.length > 0);
   const skipped = rows.filter((row) => row.skipped !== null);
@@ -129,7 +130,7 @@ function UpdateEverythingDialogContent({
     <>
       <AlertDialogHeader className="shrink-0">
         <AlertDialogTitle>
-          {title ?? `Update ${updating.length} ${updating.length === 1 ? "machine" : "machines"}?`}
+          {title ?? tPlural(updating.length, "Update {count} machine?", "Update {count} machines?")}
         </AlertDialogTitle>
         <AlertDialogDescription>
           {version !== null ? (
@@ -139,7 +140,7 @@ function UpdateEverythingDialogContent({
           ) : null}
           {version !== null && providerCount > 0 ? " · " : null}
           {providerCount > 0
-            ? `${providerCount} provider ${providerCount === 1 ? "update" : "updates"}`
+            ? tPlural(providerCount, "{count} provider update", "{count} provider updates")
             : null}
         </AlertDialogDescription>
       </AlertDialogHeader>
@@ -153,9 +154,9 @@ function UpdateEverythingDialogContent({
           {/* Machine names truncate first. Provider lists wrap between names, never inside one. */}
           <div className="grid grid-cols-[minmax(4rem,max-content)_max-content_minmax(min-content,1fr)_max-content] gap-x-4 text-sm">
             <div className="col-span-full grid grid-cols-subgrid border-b pb-1.5 text-muted-foreground text-xs">
-              <span>Machine</span>
+              <span>{t("Machine")}</span>
               <span>T3 Code</span>
-              <span>Providers</span>
+              <span>{t("Providers")}</span>
               <span />
             </div>
             {updating.map((row) => (
@@ -221,14 +222,17 @@ function UpdateEverythingDialogContent({
         ) : running > 0 ? (
           <p className="self-center text-muted-foreground text-sm max-sm:order-1 max-sm:text-center sm:mr-auto">
             {stopped === 0
-              ? `${threads} will be interrupted and can resume after the restart.`
+              ? t("{threads} will be interrupted and can resume after the restart.", { threads })
               : continuing === 0
-                ? `${threads} will be interrupted.`
-                : `${threads} will be interrupted. ${continuing} can resume after the restart.`}
+                ? t("{threads} will be interrupted.", { threads })
+                : t("{threads} will be interrupted. {continuing} can resume after the restart.", {
+                    threads,
+                    continuing,
+                  })}
           </p>
         ) : null}
         <AlertDialogClose ref={cancelRef} render={<Button variant="outline" disabled={busy} />}>
-          Cancel
+          {t("Cancel")}
         </AlertDialogClose>
         <Button disabled={disabledReason !== null || busy} onClick={onConfirm}>
           {confirmLabel}

@@ -14,6 +14,7 @@ import {
 import { Button } from "./ui/button";
 import { stackedThreadToast, toastManager } from "./ui/toast";
 import { Tooltip, TooltipPopup, TooltipTrigger } from "./ui/tooltip";
+import { t } from "~/i18n";
 
 export function useProviderUpdates() {
   const { environments } = useEnvironments();
@@ -91,7 +92,7 @@ export function ProviderUpdatesAction() {
             disabled={isPending}
             onClick={() => void handleUpdate()}
           >
-            {isPending ? "Updating…" : "Update all"}
+            {isPending ? t("Updating…") : t("Update all")}
           </Button>
         }
       />

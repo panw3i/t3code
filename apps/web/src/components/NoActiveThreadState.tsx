@@ -2,6 +2,7 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "./ui/empty";
 import { SidebarInset } from "./ui/sidebar";
 import { isElectron } from "../env";
 import { WorkspacePageHeader } from "./WorkspacePageHeader";
+import { t } from "~/i18n";
 
 export function NoActiveThreadState() {
   return (
@@ -13,7 +14,7 @@ export function NoActiveThreadState() {
           ) : (
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-foreground md:text-muted-foreground/60">
-                No active thread
+                {t("No active thread")}
               </span>
             </div>
           )}
@@ -22,9 +23,9 @@ export function NoActiveThreadState() {
         <Empty className="flex-1">
           <div className="w-full max-w-lg px-8 py-12">
             <EmptyHeader className="max-w-none">
-              <EmptyTitle>Pick a thread to continue</EmptyTitle>
+              <EmptyTitle>{t("Pick a thread to continue")}</EmptyTitle>
               <EmptyDescription>
-                Select an existing thread or create a new one to get started.
+                {t("Select an existing thread or create a new one to get started.")}
               </EmptyDescription>
             </EmptyHeader>
           </div>

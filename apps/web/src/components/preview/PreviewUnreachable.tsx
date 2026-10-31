@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
@@ -70,14 +71,14 @@ export function PreviewUnreachable({ url, code, description, onReload, move }: P
 
         {showDetails ? (
           <div className="mt-6 rounded-lg border border-border bg-muted/40 p-4 text-sm">
-            <p className="mb-2 font-medium text-foreground">Try:</p>
+            <p className="mb-2 font-medium text-foreground">{t("Try:")}</p>
             <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
-              <li>Checking your connection</li>
-              <li>Confirming the dev server is running</li>
+              <li>{t("Checking your connection")}</li>
+              <li>{t("Confirming the dev server is running")}</li>
               {move ? (
-                <li>Opening it in the environment&rsquo;s browser, which reaches its network</li>
+                <li>{t("Opening it in the environment’s browser, which reaches its network")}</li>
               ) : null}
-              <li>Checking the proxy and the firewall</li>
+              <li>{t("Checking the proxy and the firewall")}</li>
             </ul>
           </div>
         ) : null}
@@ -93,7 +94,7 @@ export function PreviewUnreachable({ url, code, description, onReload, move }: P
             size="sm"
             onClick={() => setShowDetails((value) => !value)}
           >
-            {showDetails ? "Hide details" : "Details"}
+            {showDetails ? t("Hide details") : t("Details")}
           </Button>
           <div className="flex-1" />
           {move ? (

@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import {
   AuthProvidersManageScope,
   type EnvironmentId,
@@ -42,9 +43,15 @@ import { UsageLimitsPooled } from "./UsageLimitsPooled";
 import { PROVIDER_PRESENTATION } from "./usageProviders";
 
 const PACE: Record<LimitPace, { readonly label: string; readonly icon: typeof GaugeIcon }> = {
-  ahead: { label: "Ahead of pace: spending faster than the window elapses", icon: TrendingUpIcon },
-  on: { label: "On pace with the window", icon: GaugeIcon },
-  under: { label: "Under pace: headroom left for the rest of the window", icon: TrendingDownIcon },
+  ahead: {
+    label: t("Ahead of pace: spending faster than the window elapses"),
+    icon: TrendingUpIcon,
+  },
+  on: { label: t("On pace with the window"), icon: GaugeIcon },
+  under: {
+    label: t("Under pace: headroom left for the rest of the window"),
+    icon: TrendingDownIcon,
+  },
 };
 
 export function barColor(driver: ServerProvider["driver"]): string {
@@ -170,7 +177,9 @@ function WindowBar({
             {remaining}% left{timeLeft !== null ? ` · ${timeLeft}% of the window left` : ""}
           </span>
           {timeLeft !== null ? (
-            <span className="text-muted-foreground">The line is where even spending would be.</span>
+            <span className="text-muted-foreground">
+              {t("The line is where even spending would be.")}
+            </span>
           ) : null}
           {resetsAt ? (
             <span className="text-muted-foreground">
@@ -228,10 +237,10 @@ export function LimitWindows({
 }
 
 const OUTCOME_TEXT: Record<ProviderConsumeResetCreditOutcome, string> = {
-  reset: "Reset applied. Your windows have cleared.",
-  nothingToReset: "Nothing to reset right now.",
-  noCredit: "No reset credit left.",
-  alreadyRedeemed: "That credit was already redeemed.",
+  reset: t("Reset applied. Your windows have cleared."),
+  nothingToReset: t("Nothing to reset right now."),
+  noCredit: t("No reset credit left."),
+  alreadyRedeemed: t("That credit was already redeemed."),
 };
 
 export function useResetCredit(
@@ -258,7 +267,7 @@ export function useResetCredit(
     setStatus(
       "error" in result.cause && result.cause.error instanceof Error
         ? result.cause.error.message
-        : "Could not use the reset credit.",
+        : t("Could not use the reset credit."),
     );
   };
 
@@ -282,14 +291,14 @@ export function ResetCreditDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogPopup>
         <AlertDialogHeader>
-          <AlertDialogTitle>Use a reset credit?</AlertDialogTitle>
+          <AlertDialogTitle>{t("Use a reset credit?")}</AlertDialogTitle>
           <AlertDialogDescription>
             This redeems one credit on your account and clears the current rate-limit windows. It
             cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogClose render={<Button variant="outline" />}>Cancel</AlertDialogClose>
+          <AlertDialogClose render={<Button variant="outline" />}>{t("Cancel")}</AlertDialogClose>
           <Button disabled={disabled} onClick={onConfirm}>
             Use credit
           </Button>
@@ -307,7 +316,7 @@ export function resetCreditsSummary(
   const expiresIn = credits.nextExpiresAt
     ? formatDuration(Date.parse(credits.nextExpiresAt) - now)
     : null;
-  if (credits.availableCount === 0) return "No reset credits banked";
+  if (credits.availableCount === 0) return t("No reset credits banked");
   if (compact)
     return `${credits.availableCount} banked${expiresIn ? ` · expires in ${expiresIn}` : ""}`;
   return `${credits.availableCount} ${credits.availableCount === 1 ? "reset credit" : "reset credits"} banked${
@@ -343,7 +352,7 @@ export function ResetCredits({
             if (readEnvironmentScope(environmentId, AuthProvidersManageScope)) setConfirming(true);
           }}
         >
-          {busy ? "Using…" : "Use reset"}
+          {busy ? t("Using…") : t("Use reset")}
         </Button>
       ) : null}
       {status ? <span className="text-foreground">{status}</span> : null}

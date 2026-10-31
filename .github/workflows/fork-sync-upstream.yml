@@ -1,0 +1,111 @@
+# 定时把 pingdotgg/t3code 的 main 合并进本 fork，并重新裁剪为 server + web。
+# 需要仓库 Secret SYNC_TOKEN：具备 Contents、Workflows、Pull requests、Issues 读写权限的 PAT，
+# 因为上游提交会改动 .github/workflows，默认 GITHUB_TOKEN 无权推送这类提交。
+name: Fork · Sync upstream
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: fork-sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
+    steps:
+      - name: Require SYNC_TOKEN
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::缺少 SYNC_TOKEN secret，见 .fork/README.md"
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: package.json
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Merge upstream
+        id: merge
+        run: |
+          set +e
+          before="$(git rev-parse HEAD)"
+          bash scripts/fork/sync-upstream.sh
+          code=$?
+          set -e
+          if [ "$code" = 2 ]; then
+            echo "status=conflict" >> "$GITHUB_OUTPUT"
+          elif [ "$code" != 0 ]; then
+            exit "$code"
+          elif [ "$(git rev-parse HEAD)" = "$before" ]; then
+            echo "status=up-to-date" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=merged" >> "$GITHUB_OUTPUT"
+            echo "upstream=$(git rev-parse --short upstream/main)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install and typecheck
+        id: verify
+        if: steps.merge.outputs.status == 'merged'
+        continue-on-error: true
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run typecheck
+
+      - name: Push to main
+        if: steps.merge.outputs.status == 'merged' && steps.verify.outcome == 'success'
+        run: git push origin HEAD:main
+
+      - name: Open PR for failing merge
+        if: steps.merge.outputs.status == 'merged' && steps.verify.outcome != 'success'
+        env:
+          UPSTREAM: ${{ steps.merge.outputs.upstream }}
+        run: |
+          branch="fork-sync/upstream-$UPSTREAM"
+          git push --force origin "HEAD:refs/heads/$branch"
+          if [ -z "$(gh pr list --head "$branch" --state open --json number -q '.[].number')" ]; then
+            gh pr create --base main --head "$branch" \
+              --title "同步上游 $UPSTREAM（类型检查未通过）" \
+              --body "上游已自动合并并完成裁剪，但 \`pnpm run typecheck\` 失败，需要人工修复后合并。详见 Actions 运行日志：$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          fi
+
+      - name: Report merge conflicts
+        if: steps.merge.outputs.status == 'conflict'
+        run: |
+          gh label create fork-sync --color FBCA04 --description "上游同步" --force >/dev/null
+          body="$(printf '自动同步上游 main 时出现需要人工处理的冲突：\n\n%s\n\n本地处理：\n\n```bash\ngit fetch upstream && bash scripts/fork/sync-upstream.sh  # 会列出冲突\ngit merge upstream/main  # 手动解决后执行 bash scripts/fork/prune.sh 再提交\n```\n\n运行日志：%s' \
+            "$(sed 's/^/- `/; s/$/`/' .fork-sync-conflicts.txt)" \
+            "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID")"
+          existing="$(gh issue list --label fork-sync --state open --json number -q '.[0].number')"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --label fork-sync --title "上游同步存在冲突" --body "$body"
+          fi
+          exit 1

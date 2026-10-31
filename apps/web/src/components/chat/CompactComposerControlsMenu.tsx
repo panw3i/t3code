@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { ProviderInteractionMode, RuntimeMode } from "@t3tools/contracts";
 import { memo, type ReactNode, useRef } from "react";
 import { EllipsisIcon } from "lucide-react";
@@ -44,7 +45,7 @@ export const CompactComposerControlsMenu = memo(function CompactComposerControls
             ref={triggerRef}
             size={size}
             className="shrink-0"
-            aria-label="More composer controls"
+            aria-label={t("More composer controls")}
             data-composer-shortcut={
               [
                 props.showPermissions !== false ? "composer.mode" : null,
@@ -77,8 +78,8 @@ export const CompactComposerControlsMenu = memo(function CompactComposerControls
                 props.onToggleInteractionMode();
               }}
             >
-              <MenuRadioItem value="default">Chat</MenuRadioItem>
-              <MenuRadioItem value="plan">Plan</MenuRadioItem>
+              <MenuRadioItem value="default">{t("Chat")}</MenuRadioItem>
+              <MenuRadioItem value="plan">{t("Plan")}</MenuRadioItem>
             </MenuRadioGroup>
             {props.showPermissions !== false ? <MenuDivider /> : null}
           </>

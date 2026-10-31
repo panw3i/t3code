@@ -1,12 +1,13 @@
+import { t } from "~/i18n";
 import type { KeybindingCommand, ResolvedKeybindingsConfig } from "@t3tools/contracts";
 import type { UsageChartMetric } from "./UsageProviderChart";
 import { resolveShortcutCommand, type ShortcutEventLike } from "../../keybindings";
 
 export type UsageMetric = UsageChartMetric | "limits";
 export const METRIC_OPTIONS = [
-  { value: "cost", label: "Cost", command: "usage.cost" },
-  { value: "tokens", label: "Tokens", command: "usage.tokens" },
-  { value: "limits", label: "Limits", command: "usage.limits" },
+  { value: "cost", label: t("Cost"), command: "usage.cost" },
+  { value: "tokens", label: t("Tokens"), command: "usage.tokens" },
+  { value: "limits", label: t("Limits"), command: "usage.limits" },
 ] as const satisfies readonly { value: UsageMetric; label: string; command: KeybindingCommand }[];
 
 export const WINDOW_OPTIONS = [

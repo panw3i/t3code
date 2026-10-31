@@ -1,4 +1,5 @@
 /* oxlint-disable react/no-array-index-key -- A page keeps its ordinal throughout incremental layout. */
+import { t } from "~/i18n";
 import { observeResize } from "~/lib/observeResize";
 import {
   useEffect,
@@ -189,7 +190,7 @@ function OfficePage(props: {
           register(el);
         }}
         role="group"
-        aria-label={`${label} ${index + 1}`}
+        aria-label={t("{label} {number}", { label, number: index + 1 })}
         className="relative shrink-0 shadow-md"
         style={{
           width: page.width * scale,

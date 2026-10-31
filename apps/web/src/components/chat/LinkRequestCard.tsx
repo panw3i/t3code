@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { pipe } from "effect/Function";
 import { useAtomValue } from "@effect/atom-react";
 import {
@@ -118,7 +119,7 @@ function PendingLinkRequest(props: {
       <div className="flex min-w-0 flex-col gap-1">
         <p className="text-sm font-medium text-foreground">
           {picksMachine(item)
-            ? "Link a machine to this environment"
+            ? t("Link a machine to this environment")
             : `Link ${target} to this environment`}
         </p>
         {item.reason.trim() ? <p className="text-sm text-muted-foreground">{item.reason}</p> : null}
@@ -140,15 +141,15 @@ function PendingLinkRequest(props: {
             disabled={declining}
             onClick={() => void decline()}
           >
-            Decline
+            {t("Decline")}
           </Button>
           <Button type="button" size="xs" disabled={declining} onClick={() => setOpen(true)}>
-            {picksMachine(item) ? "Choose machine…" : "Review link…"}
+            {picksMachine(item) ? t("Choose machine…") : t("Review link…")}
           </Button>
         </div>
       ) : (
         <p className="text-xs text-muted-foreground">
-          Only a session that manages access here can answer this.
+          {t("Only a session that manages access here can answer this.")}
         </p>
       )}
       <LinkRequestDialog
@@ -335,7 +336,7 @@ function LinkRequestDialog(props: {
         >
           {steps.length > 1 && !useExisting ? (
             <WizardSteps
-              steps={["Machine", "Access"]}
+              steps={[t("Machine"), t("Access")]}
               currentStep={steps.indexOf(current)}
               summaries={[target.kind === "none" ? null : targetName, null]}
               showSummaries
@@ -459,7 +460,13 @@ function LinkRequestDialog(props: {
             type="submit"
             disabled={busy || (finishesHere ? !ready : !machineReady)}
           >
-            {busy ? "Linking…" : useExisting ? "Use this link" : finishesHere ? "Link" : "Continue"}
+            {busy
+              ? t("Linking…")
+              : useExisting
+                ? t("Use this link")
+                : finishesHere
+                  ? "Link"
+                  : t("Continue")}
           </Button>
         </WizardFooter>
       </WizardPopup>
@@ -478,7 +485,7 @@ function MachinePicker(props: {
   return (
     <div className="space-y-2">
       <span id={labelId} className="block text-xs font-medium">
-        Machine
+        {t("Machine")}
       </span>
       <RadioGroup
         aria-labelledby={labelId}

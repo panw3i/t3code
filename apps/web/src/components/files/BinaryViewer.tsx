@@ -1,4 +1,5 @@
 /* oxlint-disable react/no-array-index-key -- Read-only cells retain their database row and column positions. */
+import { t } from "~/i18n";
 import {
   decodeFilePreviewText,
   filePreviewKind,
@@ -63,12 +64,14 @@ function ArchiveFile(props: { readonly path: string; readonly bytes: Uint8Array<
     return url ? <PreviewImage key={url} src={url} name={props.path} /> : <FileSurfaceLoading />;
   if (!text)
     return (
-      <FileSurfaceFailure message="Only UTF-8 text and images can be opened inside an archive." />
+      <FileSurfaceFailure
+        message={t("Only UTF-8 text and images can be opened inside an archive.")}
+      />
     );
   return (
     <>
       {text.truncated ? (
-        <FileSurfaceNotice>Preview limited to the first 1 MB.</FileSurfaceNotice>
+        <FileSurfaceNotice>{t("Preview limited to the first 1 MB.")}</FileSurfaceNotice>
       ) : null}
       <Suspense fallback={<FileSurfaceLoading />}>
         <SourcePreview name={props.path} text={text.text} />
@@ -101,7 +104,7 @@ export default function BinaryViewer(props: {
     setError(null);
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
-      setError("This file took too long to preview. Close it and try again.");
+      setError(t("This file took too long to preview. Close it and try again."));
       setBusy(false);
       workerRef.current?.terminate();
       workerRef.current = null;
@@ -125,11 +128,11 @@ export default function BinaryViewer(props: {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
     timerRef.current = setTimeout(
-      () => fail("This file took too long to preview. Close it and try again."),
+      () => fail(t("This file took too long to preview. Close it and try again.")),
       30_000,
     );
     worker.addEventListener("error", () =>
-      fail("Could not load the file viewer. Close it and try again."),
+      fail(t("Could not load the file viewer. Close it and try again.")),
     );
     worker.addEventListener("message", (event: MessageEvent<BinaryWorkerResult>) => {
       if (controller.signal.aborted) return;
@@ -157,7 +160,7 @@ export default function BinaryViewer(props: {
         }
       })
       .catch((cause: unknown) =>
-        fail(cause instanceof Error ? cause.message : "Could not read this file."),
+        fail(cause instanceof Error ? cause.message : t("Could not read this file.")),
       );
     return () => {
       controller.abort();
@@ -195,7 +198,7 @@ export default function BinaryViewer(props: {
       {archive ? (
         <div className="flex h-10 shrink-0 items-center gap-2 border-b border-border/60 px-3 text-xs">
           <FileSurfaceAction
-            label={selectedPath ? "Back to archive" : "Parent folder"}
+            label={selectedPath ? t("Back to archive") : t("Parent folder")}
             disabled={!selectedPath && !folder}
             onPress={() => {
               setError(null);
@@ -207,7 +210,7 @@ export default function BinaryViewer(props: {
             <ChevronLeftIcon className="size-3.5" />
           </FileSurfaceAction>
           <span className="min-w-0 flex-1 truncate">
-            {selectedPath ?? (folder || "Archive contents")}
+            {selectedPath ?? (folder || t("Archive contents"))}
           </span>
           <span className="shrink-0 text-muted-foreground">
             {archive.entries.length.toLocaleString()} entries
@@ -225,7 +228,12 @@ export default function BinaryViewer(props: {
                   if (!busy && value !== null) selectPage(0, value);
                 }}
               >
-                <SelectTrigger aria-label="Table" aria-disabled={busy} aria-busy={busy} size="xs">
+                <SelectTrigger
+                  aria-label={t("Table")}
+                  aria-disabled={busy}
+                  aria-busy={busy}
+                  size="xs"
+                >
                   <SelectValue>
                     {table.name} ({table.count.toLocaleString()} rows)
                   </SelectValue>
@@ -240,7 +248,7 @@ export default function BinaryViewer(props: {
               </Select>
             </div>
             <FileSurfaceAction
-              label="Previous rows"
+              label={t("Previous rows")}
               disabled={busy || page === 0}
               onPress={() => selectPage(page - 1)}
             >
@@ -252,7 +260,7 @@ export default function BinaryViewer(props: {
                 : `${page * SQLITE_PAGE_SIZE + 1}–${Math.min(table.count, (page + 1) * SQLITE_PAGE_SIZE)} of ${table.count.toLocaleString()}`}
             </span>
             <FileSurfaceAction
-              label="Next rows"
+              label={t("Next rows")}
               disabled={busy || (page + 1) * SQLITE_PAGE_SIZE >= table.count}
               onPress={() => selectPage(page + 1)}
             >
@@ -285,7 +293,7 @@ export default function BinaryViewer(props: {
       ) : archive ? (
         <div className="scrollbar-gutter-both min-h-0 flex-1 overflow-auto">
           <table
-            aria-label="Archive entries"
+            aria-label={t("Archive entries")}
             className="w-full border-separate border-spacing-0 text-xs"
           >
             <thead className="sticky top-0 bg-background text-muted-foreground">
@@ -344,7 +352,7 @@ export default function BinaryViewer(props: {
             </tbody>
           </table>
           {children.size === 0 ? (
-            <p className="p-6 text-xs text-muted-foreground">This folder is empty.</p>
+            <p className="p-6 text-xs text-muted-foreground">{t("This folder is empty.")}</p>
           ) : null}
         </div>
       ) : rows ? (
@@ -382,11 +390,13 @@ export default function BinaryViewer(props: {
             </tbody>
           </table>
           {rows.rows.length === 0 ? (
-            <p className="p-6 text-xs text-muted-foreground">This table is empty.</p>
+            <p className="p-6 text-xs text-muted-foreground">{t("This table is empty.")}</p>
           ) : null}
         </div>
       ) : (
-        <p className="p-6 text-xs text-muted-foreground">This database has no readable tables.</p>
+        <p className="p-6 text-xs text-muted-foreground">
+          {t("This database has no readable tables.")}
+        </p>
       )}
     </div>
   );

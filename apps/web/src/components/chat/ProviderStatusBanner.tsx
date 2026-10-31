@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { type ProviderInstanceId, type ServerProvider } from "@t3tools/contracts";
 import { memo } from "react";
 import { InfoIcon, XIcon } from "lucide-react";
@@ -73,13 +74,13 @@ export function getProviderStatusMessage(status: ServerProvider): string {
   if (status.auth.status === "unauthenticated") {
     if (hasProviderSetup(status)) {
       return status.driver === "antigravity"
-        ? "Open provider setup to sign in with Google."
-        : "Open provider setup to sign in.";
+        ? t("Open provider setup to sign in with Google.")
+        : t("Open provider setup to sign in.");
     }
-    return "Sign in via the CLI to authenticate again.";
+    return t("Sign in via the CLI to authenticate again.");
   }
   return status.status === "ready"
-    ? "No models are available for this provider."
+    ? t("No models are available for this provider.")
     : status.status === "error"
       ? `${providerName} provider is unavailable.`
       : `${providerName} provider has limited availability.`;
@@ -129,7 +130,7 @@ export const ProviderStatusBanner = memo(function ProviderStatusBanner({
           </Tooltip>
           {onOpenProviderSetup && hasProviderSetup(status) ? (
             <InlineButton onClick={() => onOpenProviderSetup(status.instanceId)}>
-              Open provider setup
+              {t("Open provider setup")}
             </InlineButton>
           ) : null}
         </AlertDescription>

@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import type {
   ModelSelection,
   ProviderInstanceId,
@@ -51,8 +52,8 @@ export const ComposerFooterModeControls = memo(function ComposerFooterModeContro
   const RuntimeModeIcon = runtimeModeOption.icon;
   const interactionModeTooltip =
     props.interactionMode === "plan"
-      ? "Plan mode. Click to return to normal build mode"
-      : "Default mode. Click to enter plan mode";
+      ? t("Plan mode. Click to return to normal build mode")
+      : t("Default mode. Click to enter plan mode");
 
   const interactionModeToggle = props.showInteractionModeToggle ? (
     <Tooltip>
@@ -86,7 +87,7 @@ export const ComposerFooterModeControls = memo(function ComposerFooterModeContro
           data-composer-control-label
           className={size === "xs" ? "sr-only" : "sr-only sm:not-sr-only"}
         >
-          {props.interactionMode === "plan" ? "Plan" : "Build"}
+          {props.interactionMode === "plan" ? t("Plan") : t("Build")}
         </span>
       </TooltipTrigger>
       <TooltipPopup side="top">{interactionModeTooltip}</TooltipPopup>
@@ -114,7 +115,7 @@ export const ComposerFooterModeControls = memo(function ComposerFooterModeContro
                   size={size}
                   // Mirrors the effort chip's trailing pe-1 so both gaps around the bars match.
                   className="ps-1.5"
-                  aria-label={`Permissions: ${runtimeModeOption.label}`}
+                  aria-label={t("Permissions: {mode}", { mode: runtimeModeOption.label })}
                 />
               }
             />
@@ -177,7 +178,7 @@ export function ComposerPermissionsSection(props: {
     <div data-composer-permissions className="grid w-72 gap-1.5 px-2 py-1.5">
       <div className="font-medium text-muted-foreground text-xs">Permissions</div>
       <MenuPrimitive.RadioGroup
-        aria-label="Permissions"
+        aria-label={t("Permissions")}
         value={props.runtimeMode}
         onValueChange={(value: RuntimeMode) => {
           if (value !== props.runtimeMode) props.onRuntimeModeChange(value);

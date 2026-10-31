@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { useAtomValue } from "@effect/atom-react";
 import type { ServerUpdateState } from "@t3tools/client-runtime/state/server";
 import { useState } from "react";
@@ -112,7 +113,7 @@ export function useAutoBalanceUpdateBanner(
                   <div className="text-muted-foreground">
                     {machine.connected
                       ? `Ready to update to ${machine.targetVersion}`
-                      : "Reconnect this machine to update"}
+                      : t("Reconnect this machine to update")}
                   </div>
                 )}
               </div>
@@ -130,14 +131,14 @@ export function useAutoBalanceUpdateBanner(
           variant="ghost"
           label={
             failed > 0
-              ? "Retry"
+              ? t("Retry")
               : targets.length === machines.length
-                ? "Update all"
+                ? t("Update all")
                 : `Update ${targets.length} ${targets.length === 1 ? "machine" : "machines"}`
           }
         />
       ) : undefined,
-    dismissLabel: "Dismiss update notice",
+    dismissLabel: t("Dismiss update notice"),
     ...(running
       ? {}
       : {

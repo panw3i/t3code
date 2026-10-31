@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import {
   worktreeSetupStageLabel,
   type WorktreeSetupSnapshot,
@@ -112,15 +113,15 @@ function ShimmerOverlay({ children }: { children: ReactNode }) {
 function headerLabel(snapshot: WorktreeSetupSnapshot): string {
   switch (snapshot.phase) {
     case "running":
-      return "Setting up worktree…";
+      return t("Setting up worktree…");
     case "done":
       return snapshot.stages.some((stage) => stage.status === "failed")
-        ? "Worktree ready, setup script failed"
-        : "Worktree ready";
+        ? t("Worktree ready, setup script failed")
+        : t("Worktree ready");
     case "failed":
-      return "Worktree setup failed";
+      return t("Worktree setup failed");
     case "cancelled":
-      return "Worktree setup cancelled";
+      return t("Worktree setup cancelled");
   }
 }
 
@@ -176,7 +177,7 @@ function StageRow({
     stage.status === "pending"
       ? null
       : stage.status === "skipped"
-        ? (stage.detail ?? "skipped")
+        ? (stage.detail ?? t("skipped"))
         : stage.id === "checkout" && running && stage.percent !== null
           ? `${stage.percent}%`
           : stage.detail;
@@ -367,24 +368,24 @@ export function WorktreeSetupCard({
           onClick={() => setDetailsOpen((open) => !open)}
         >
           <MorphIcon aria-hidden icon={detailsOpen ? ChevronDown : ChevronRight} />
-          Details
+          {t("Details")}
         </Button>
         {showTerminal ? (
           <Button type="button" size="xs" variant="ghost-muted" onClick={onOpenTerminal}>
             <TerminalIcon aria-hidden />
-            Open terminal
+            {t("Open terminal")}
           </Button>
         ) : null}
         {onWorkLocally ? (
           <Button type="button" size="xs" variant="ghost-muted" onClick={onWorkLocally}>
             <LaptopIcon aria-hidden />
-            Work locally
+            {t("Work locally")}
           </Button>
         ) : null}
         {onCancel && running ? (
           <Button type="button" size="xs" variant="ghost-muted" onClick={onCancel}>
             <XIcon aria-hidden />
-            Cancel
+            {t("Cancel")}
           </Button>
         ) : null}
       </div>

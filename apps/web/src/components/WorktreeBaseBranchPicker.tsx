@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import type { EnvironmentId } from "@t3tools/contracts";
 import { ChevronDownIcon, GitBranchIcon } from "lucide-react";
 import { useDeferredValue, useState } from "react";
@@ -62,11 +63,14 @@ export function WorktreeBaseBranchPicker({
   const statusText =
     branches.error ??
     (branches.isPending && branches.data === null
-      ? "Loading refs..."
+      ? t("Loading refs...")
       : branches.isFetchingNextPage
-        ? "Loading more refs..."
+        ? t("Loading more refs...")
         : hasNextPage
-          ? `Showing ${branches.refs.length} of ${branches.data?.totalCount} refs`
+          ? t("Showing {shown} of {total} refs", {
+              shown: branches.refs.length,
+              total: branches.data?.totalCount ?? "",
+            })
           : null);
   const handleOpenChange = (next: boolean) => {
     setOpen(next);

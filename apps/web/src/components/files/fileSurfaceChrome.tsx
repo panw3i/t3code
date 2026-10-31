@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import type { ReactNode } from "react";
 
 import { Spinner } from "~/components/ui/spinner";
@@ -117,7 +118,7 @@ export function FileSurfaceLoading(props: { readonly className?: string }) {
   return (
     <div
       role="status"
-      aria-label="Loading file"
+      aria-label={t("Loading file")}
       className={cn(
         "flex min-h-0 flex-1 items-center justify-center text-muted-foreground",
         props.className,

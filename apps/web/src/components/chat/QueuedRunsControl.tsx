@@ -1,3 +1,4 @@
+import { t, tPlural } from "~/i18n";
 import { scopeThreadRef } from "@t3tools/client-runtime/environment";
 import { deriveThreadQueueWorkflowState } from "@t3tools/client-runtime/state/thread-workflows";
 import { assistantCitationsToPlainText } from "@t3tools/shared/assistantCitations";
@@ -230,7 +231,9 @@ export function QueuedRunsControl({
 
   return (
     <section
-      aria-label={`${items.length} queued message${items.length === 1 ? "" : "s"}`}
+      aria-label={tPlural(items.length, "{count} queued message", "{count} queued messages", {
+        count: items.length,
+      })}
       data-thread-queue="true"
       // Anchors the sr-only live region; unanchored, it escapes the timeline scroller and makes the chat column scroll.
       className="relative mx-auto flex w-full max-w-(--chat-content-max-width) flex-col gap-2 pb-4"
@@ -251,7 +254,10 @@ export function QueuedRunsControl({
           return (
             <li
               key={item.key}
-              aria-label={`Queued message ${position + 1} of ${items.length}, not sent`}
+              aria-label={t("Queued message {position} of {total}, not sent", {
+                position: position + 1,
+                total: items.length,
+              })}
               aria-posinset={position + 1}
               aria-setsize={items.length}
               aria-current={isEditing ? "true" : undefined}
@@ -281,7 +287,7 @@ export function QueuedRunsControl({
                           }}
                         >
                           <ArrowUpIcon />
-                          Send now
+                          {t("Send now")}
                         </Button>
                       </TooltipTrigger>
                       <TooltipPopup>
@@ -293,7 +299,7 @@ export function QueuedRunsControl({
                 {item.pending ? (
                   <span className="flex items-center gap-1 px-1">
                     <Clock3Icon aria-hidden className="size-3" />
-                    Saving
+                    {t("Saving")}
                   </span>
                 ) : null}
                 {isEditing ? (
@@ -302,10 +308,10 @@ export function QueuedRunsControl({
                     <Button
                       size="xs"
                       variant="ghost"
-                      aria-label="Cancel editing queued message"
+                      aria-label={t("Cancel editing queued message")}
                       onClick={props.onCancelEdit}
                     >
-                      Cancel
+                      {t("Cancel")}
                     </Button>
                   </>
                 ) : (
@@ -316,7 +322,7 @@ export function QueuedRunsControl({
                         <Button
                           size="icon-xs"
                           variant="ghost-muted"
-                          aria-label="Edit queued message"
+                          aria-label={t("Edit queued message")}
                           disabled={
                             item.runId === null ||
                             !item.editable ||
@@ -348,7 +354,7 @@ export function QueuedRunsControl({
                           <Button
                             size="icon-xs"
                             variant="ghost-muted"
-                            aria-label="Remove queued message"
+                            aria-label={t("Remove queued message")}
                             disabled={item.runId === null || busyRunId !== null}
                             onClick={() => {
                               if (item.runId !== null) void remove(item.runId);
@@ -358,7 +364,7 @@ export function QueuedRunsControl({
                       >
                         <XIcon />
                       </TooltipTrigger>
-                      <TooltipPopup>Remove from queue</TooltipPopup>
+                      <TooltipPopup>{t("Remove from queue")}</TooltipPopup>
                     </Tooltip>
                   </>
                 )}
@@ -377,7 +383,7 @@ export function QueuedRunsControl({
             onPointerDown={(event) => event.preventDefault()}
             onClick={() => setShowAll((value) => !value)}
           >
-            {showAll ? "Show fewer" : `Show all ${items.length} queued`}
+            {showAll ? t("Show fewer") : t("Show all {count} queued", { count: items.length })}
             <ChevronDownIcon
               aria-hidden
               className={cn(
@@ -420,13 +426,13 @@ function QueuedMessage(props: {
     attribution === "automation"
       ? {
           icon: CalendarClockIcon,
-          label: "Automation",
+          label: t("Automation"),
           summary: taskTitle ?? props.previewText.split(/\r?\n/, 1)[0] ?? "",
         }
       : attribution === "agent"
         ? {
             icon: MessagesSquareIcon,
-            label: senderShell?.title.trim() || "Agent",
+            label: senderShell?.title.trim() || t("Agent"),
             summary: props.previewText.split(/\r?\n/).find((line) => line.trim()) ?? "",
           }
         : null;
@@ -501,7 +507,7 @@ function QueuedMessage(props: {
           <span className="me-1 flex items-center gap-2 px-1 opacity-0 transition-opacity duration-200 pointer-coarse:opacity-100 focus-within:opacity-100 group-hover/queued:opacity-100">
             {attribution === "agent" && senderThreadId ? (
               <InlineButton tone="muted" onClick={() => props.onOpenThread(senderThreadId)}>
-                Open thread
+                {t("Open thread")}
               </InlineButton>
             ) : null}
             {scheduledTaskId ? (
@@ -514,7 +520,7 @@ function QueuedMessage(props: {
                   />
                 }
               >
-                Open automation
+                {t("Open automation")}
               </InlineButton>
             ) : null}
             <TimelineRowTimestamp

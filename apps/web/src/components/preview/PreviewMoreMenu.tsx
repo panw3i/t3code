@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import type { DesktopPreviewColorScheme } from "@t3tools/contracts";
 import { Minus, MoreVertical, Plus as PlusIcon, RotateCcw } from "lucide-react";
 
@@ -23,8 +24,8 @@ const COLOR_SCHEME_OPTIONS: ReadonlyArray<{
   label: string;
 }> = [
   { value: "system", label: "System" },
-  { value: "light", label: "Light" },
-  { value: "dark", label: "Dark" },
+  { value: "light", label: t("Light") },
+  { value: "dark", label: t("Dark") },
 ];
 
 export interface PreviewMoreMenuActions {
@@ -62,7 +63,7 @@ const MenuTriggerButton = () => (
     >
       <MoreVertical />
     </TooltipTrigger>
-    <TooltipPopup>More</TooltipPopup>
+    <TooltipPopup>{t("More")}</TooltipPopup>
   </Tooltip>
 );
 
@@ -94,16 +95,16 @@ export function PreviewMoreMenu({
         {actions.toggleNativePictureInPicture ? (
           <MenuItem onClick={actions.toggleNativePictureInPicture} disabled={disabled}>
             {nativePictureInPicture
-              ? "Close separate preview window"
-              : "Open separate preview window"}
+              ? t("Close separate preview window")
+              : t("Open separate preview window")}
           </MenuItem>
         ) : null}
         {move ? <MenuItem onClick={move.onMove}>{move.label}</MenuItem> : null}
         <MenuItem onClick={onToggleDeviceToolbar} disabled={disabled}>
-          {deviceToolbarVisible ? "Hide device toolbar" : "Show device toolbar"}
+          {deviceToolbarVisible ? t("Hide device toolbar") : t("Show device toolbar")}
         </MenuItem>
         <MenuSub>
-          <MenuSubTrigger disabled={disabled}>Appearance</MenuSubTrigger>
+          <MenuSubTrigger disabled={disabled}>{t("Appearance")}</MenuSubTrigger>
           <MenuSubPopup>
             <MenuRadioGroup
               value={colorScheme}
@@ -124,14 +125,14 @@ export function PreviewMoreMenu({
           className="justify-between"
           disabled={disabled}
         >
-          <span>Zoom</span>
+          <span>{t("Zoom")}</span>
           <span className="flex items-center gap-1">
             <Button
               variant="outline"
               size="icon-xs"
               type="button"
               onClick={actions.zoomOut}
-              aria-label="Zoom out"
+              aria-label={t("Zoom out")}
               disabled={disabled}
             >
               <Minus />
@@ -144,7 +145,7 @@ export function PreviewMoreMenu({
               size="icon-xs"
               type="button"
               onClick={actions.zoomIn}
-              aria-label="Zoom in"
+              aria-label={t("Zoom in")}
               disabled={disabled}
             >
               <PlusIcon />
@@ -154,7 +155,7 @@ export function PreviewMoreMenu({
               size="icon-xs"
               type="button"
               onClick={actions.resetZoom}
-              aria-label="Reset zoom"
+              aria-label={t("Reset zoom")}
               disabled={disabled}
             >
               <RotateCcw />
@@ -168,8 +169,8 @@ export function PreviewMoreMenu({
               <span className="block truncate">Profile: {profileName}</span>
             </MenuGroupLabel>
           ) : null}
-          <MenuItem onClick={actions.clearCookies}>Clear cookies</MenuItem>
-          <MenuItem onClick={actions.clearCache}>Clear cache</MenuItem>
+          <MenuItem onClick={actions.clearCookies}>{t("Clear cookies")}</MenuItem>
+          <MenuItem onClick={actions.clearCache}>{t("Clear cache")}</MenuItem>
         </MenuGroup>
       </MenuPopup>
     </Menu>

@@ -7,6 +7,7 @@ import {
 } from "../desktopUpdate.logic";
 import { formatRelativeTimeLabel } from "../../timestampFormat";
 import { openDesktopUpdateReleaseNotes } from "../desktopUpdate.toast";
+import { t, tPlural } from "~/i18n";
 
 type DesktopUpdateShell = Pick<DesktopBridge, "openExternal">;
 
@@ -28,7 +29,7 @@ function formatReleaseAge(releasedAt: string): string {
   const days = Math.round(
     (today - Date.UTC(Number(day[1]), Number(day[2]) - 1, Number(day[3]))) / 86_400_000,
   );
-  return days <= 0 ? "today" : `${days}d ago`;
+  return days <= 0 ? t("today") : t("{days}d ago", { days });
 }
 
 function ReleaseLink({
@@ -77,7 +78,7 @@ export function SidebarUpdateReleaseNotes({
         {state.status === "available" ? (
           <div>
             <div className="whitespace-nowrap text-sm leading-5 font-medium">
-              Update ready to download
+              {t("Update ready to download")}
             </div>
             {state.availableVersion ? (
               <div className="mt-0.5 text-xs leading-4 text-muted-foreground">
@@ -98,8 +99,12 @@ export function SidebarUpdateReleaseNotes({
           const linkLabel =
             releaseNote.stats ??
             (omittedItemCount === 0
-              ? "View release on GitHub"
-              : `${omittedItemCount} more ${omittedItemCount === 1 ? "change" : "changes"} on GitHub`);
+              ? t("View release on GitHub")
+              : tPlural(
+                  omittedItemCount,
+                  "{count} more change on GitHub",
+                  "{count} more changes on GitHub",
+                ));
 
           if (releaseNote.intro !== undefined) {
             return (
@@ -116,7 +121,7 @@ export function SidebarUpdateReleaseNotes({
                 </p>
                 {releaseUrl ? (
                   <ReleaseLink releaseUrl={releaseUrl} shell={shell}>
-                    {releaseNote.stats ?? "View release on GitHub"}
+                    {releaseNote.stats ?? t("View release on GitHub")}
                   </ReleaseLink>
                 ) : null}
               </section>
@@ -127,7 +132,9 @@ export function SidebarUpdateReleaseNotes({
             <div className={index > 0 ? "mt-4" : undefined} key={releaseNote.version}>
               <section>
                 <h3 className="text-foreground text-xs leading-4 font-semibold">
-                  {index === 0 ? "What's changed" : `Changes in ${releaseNote.version}`}
+                  {index === 0
+                    ? t("What's changed")
+                    : t("Changes in {version}", { version: releaseNote.version })}
                 </h3>
                 <ul className="mt-2 space-y-1.5 pl-4 text-xs leading-5 text-popover-foreground/90">
                   {keyReleaseNoteItems(releaseNote.items).map(({ item, key }) => (
@@ -148,7 +155,12 @@ export function SidebarUpdateReleaseNotes({
         {state.omittedReleaseCount > 0 ? (
           <div className="mt-3">
             <ReleaseLink releaseUrl={getDesktopUpdateReleaseHistoryUrl()} shell={shell}>
-              {`${state.omittedReleaseCount} older ${state.omittedReleaseCount === 1 ? "release" : "releases"} on GitHub`}
+              {tPlural(
+                state.omittedReleaseCount,
+                "{count} older release on GitHub",
+                "{count} older releases on GitHub",
+                { count: state.omittedReleaseCount },
+              )}
             </ReleaseLink>
           </div>
         ) : null}

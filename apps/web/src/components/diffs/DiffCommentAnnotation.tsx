@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { MessageCircle, Trash2 } from "lucide-react";
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
@@ -36,8 +37,8 @@ export function DiffCommentAnnotation({
   onCancel,
   onComment,
   onDelete,
-  placeholder = "Add a comment…",
-  submitLabel = "Comment",
+  placeholder = t("Add a comment…"),
+  submitLabel = t("Comment"),
   pending = false,
   secondaryAction,
   focusOnMount = true,
@@ -71,7 +72,7 @@ export function DiffCommentAnnotation({
             <Button
               variant="ghost-muted"
               size="icon-xs"
-              aria-label="Delete comment"
+              aria-label={t("Delete comment")}
               onClick={onDelete}
             >
               <Trash2 className="size-3" />
