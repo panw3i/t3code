@@ -543,7 +543,7 @@ function SidebarUpdateControl() {
         {showReleaseNotesPopover && state ? (
           <PopoverPopup
             align="center"
-            aria-label={t(t("Update release notes"))}
+            aria-label={t("Update release notes")}
             initialFocus={false}
             onKeyDownCapture={(event) => {
               if (

@@ -12,6 +12,7 @@ import {
   type ThemeAppearance,
   type ThemeDefinition,
 } from "../../themePalette";
+import { t } from "~/i18n";
 
 const THEME_PREVIEW_ROLES = [
   "sidebar",
@@ -169,7 +170,11 @@ export function ThemePreviewCircles({
             <TooltipTrigger
               render={
                 <button
-                  aria-label={`Use ${label} ${mode} mode`}
+                  aria-label={
+                    mode === "light"
+                      ? t("Use {label} for light mode", { label })
+                      : t("Use {label} for dark mode", { label })
+                  }
                   aria-pressed={isPicked}
                   className={cn(
                     "relative flex size-[68px] shrink-0 transform-gpu cursor-pointer items-center justify-center rounded-full p-1.5 outline-none transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-solid focus-visible:-outline-offset-5 focus-visible:outline-foreground/60",
@@ -205,7 +210,7 @@ export function ThemePreviewCircles({
               }
             />
             <TooltipPopup>
-              {mode === "light" ? "Use for light mode only" : "Use for dark mode only"}
+              {mode === "light" ? t("Use for light mode only") : t("Use for dark mode only")}
             </TooltipPopup>
           </Tooltip>
         );

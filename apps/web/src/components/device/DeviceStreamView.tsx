@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import type { DevicePlatform, EnvironmentId } from "@t3tools/contracts";
 import { useAtomValue } from "@effect/atom-react";
 import { AsyncResult, Atom } from "effect/reactivity";
@@ -230,9 +231,9 @@ export function DeviceStreamView(props: {
       : phoneUnavailable
         ? "3D is unavailable on this browser"
         : mjpegUrl
-          ? "3D requires the H.264 stream"
+          ? t("3D requires the H.264 stream")
           : props.axOverlay
-            ? "Turn off accessibility frames to use 3D"
+            ? t("Turn off accessibility frames to use 3D")
             : null;
 
   const keyboardSource = deviceKeyboard(props.platform, props.deviceName ?? "");
@@ -322,7 +323,9 @@ export function DeviceStreamView(props: {
         )}
         tabIndex={0}
         role="application"
-        aria-label={`${props.platform === "ios" ? "iOS Simulator" : "Android Emulator"} screen`}
+        aria-label={t("{device} screen", {
+          device: props.platform === "ios" ? t("iOS Simulator") : t("Android Emulator"),
+        })}
         onKeyDown={(event) => {
           if (event.target !== event.currentTarget) return;
           if (event.metaKey && !["r", "R"].includes(event.key)) return;
@@ -443,7 +446,7 @@ export function DeviceStreamView(props: {
               size="xs"
               aria-pressed={!!showPhone}
               disabled={!!phoneUnavailableReason}
-              title={phoneUnavailableReason ?? "Show 3D phone"}
+              title={phoneUnavailableReason ?? t("Show 3D phone")}
               onClick={() => setPresentation("phone")}
             >
               3D
@@ -476,10 +479,12 @@ export function DeviceStreamView(props: {
         {status !== "streaming" && !(retainingFrame && showPhone) ? (
           <div className="absolute inset-0">
             <DeviceLoadingView
-              name={props.deviceName ?? "Device"}
+              name={props.deviceName ?? t("Device")}
               description={props.deviceDescription ?? ""}
               stage="stream"
-              message={status === "error" ? (detail ?? "Stream failed.") : "Connecting video…"}
+              message={
+                status === "error" ? (detail ?? t("Stream failed.")) : t("Connecting video…")
+              }
               error={status === "error"}
             >
               {status === "error" ? (

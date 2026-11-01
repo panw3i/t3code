@@ -21,6 +21,7 @@ import { useAtomCommand } from "../../state/use-atom-command";
 import { Button, InlineButton } from "../ui/button";
 import { Spinner } from "../ui/spinner";
 import { RedactedSensitiveText } from "./RedactedSensitiveText";
+import { t } from "~/i18n";
 
 type SignInState =
   | { readonly status: "idle" }
@@ -163,15 +164,15 @@ export function SourceControlAppSignInSettings({
           Signed in as
           <RedactedSensitiveText
             value={account}
-            ariaLabel="Signed-in GitHub account"
-            revealTooltip="Show account"
-            hideTooltip="Hide account"
+            ariaLabel={t("Signed-in GitHub account")}
+            revealTooltip={t("Show account")}
+            hideTooltip={t("Hide account")}
           />
         </span>
       ) : tokenOverrides ? (
-        "Signed in, but the token saved below is used until you remove it."
+        t("Signed in, but the token saved below is used until you remove it.")
       ) : (
-        "Signed in"
+        t("Signed in")
       );
     action = (
       <Button size="xs" variant="outline" disabled={!canSignIn} onClick={() => void signOut()}>
@@ -179,7 +180,7 @@ export function SourceControlAppSignInSettings({
       </Button>
     );
   } else if (waiting !== null) {
-    subtitle = "Approve the app on GitHub to finish signing in.";
+    subtitle = t("Approve the app on GitHub to finish signing in.");
     action = (
       <Button
         size="xs"
@@ -193,7 +194,7 @@ export function SourceControlAppSignInSettings({
       </Button>
     );
   } else {
-    subtitle = "A far higher GitHub API rate limit than a personal token or gh login.";
+    subtitle = t("A far higher GitHub API rate limit than a personal token or gh login.");
     action = (
       <Button
         size="xs"
@@ -201,7 +202,7 @@ export function SourceControlAppSignInSettings({
         onClick={() => void signIn()}
       >
         {state.status === "starting" ? <Spinner /> : null}
-        {state.status === "failed" ? "Try again" : "Sign in with GitHub"}
+        {state.status === "failed" ? t("Try again") : t("Sign in with GitHub")}
       </Button>
     );
   }
@@ -229,7 +230,7 @@ export function SourceControlAppSignInSettings({
             <Button
               size="icon-xs"
               variant="ghost"
-              aria-label="Copy code"
+              aria-label={t("Copy code")}
               onClick={() => copyToClipboard(waiting.userCode, undefined)}
             >
               <MorphIcon className="size-3.5" icon={isCopied ? Check : Copy} />
@@ -259,8 +260,8 @@ export function SourceControlAppSignInSettings({
           <span className="min-w-0 flex-1">
             Reaches repositories in accounts and organizations that installed the app.
           </span>
-          <ExternalLink href={appSignIn.installUrl}>Install on an organization</ExternalLink>
-          <ExternalLink href={appSignIn.revokeUrl}>Manage on GitHub</ExternalLink>
+          <ExternalLink href={appSignIn.installUrl}>{t("Install on an organization")}</ExternalLink>
+          <ExternalLink href={appSignIn.revokeUrl}>{t("Manage on GitHub")}</ExternalLink>
         </div>
       ) : null}
 

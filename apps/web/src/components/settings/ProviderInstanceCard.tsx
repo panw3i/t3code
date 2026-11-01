@@ -965,7 +965,7 @@ export function ProviderInstanceCard({
           }
         />
         <TooltipPopup side="top">
-          {updateProgress ? t(t("Updating")) : versionAdvisory.title}
+          {updateProgress ? t("Updating") : versionAdvisory.title}
         </TooltipPopup>
       </Tooltip>
       <PopoverPopup side="bottom" align="end" width="md" aria-label={versionAdvisory.title}>

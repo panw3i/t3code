@@ -39,6 +39,7 @@ import {
 } from "@t3tools/client-runtime/review-guide-tour";
 import { GuideNoteMarker } from "./GuideNotes";
 import { GuideProse } from "./GuideProse";
+import { t } from "~/i18n";
 
 const EXCERPT_UNSAFE_CSS = `${DIFF_VIEW_UNSAFE_CSS}
 [data-code]::-webkit-scrollbar-thumb {
@@ -170,11 +171,14 @@ export function GuideExcerpt({
       ) : (
         <div className="flex items-center justify-between gap-3 rounded-lg border border-border/60 px-3 py-2 text-xs text-muted-foreground">
           <span className="min-w-0 truncate">
-            <span className="font-mono text-foreground">{excerpt.path}</span> lines {excerpt.start}-
-            {excerpt.end} are not in the loaded diff.
+            <span className="font-mono text-foreground">{excerpt.path}</span>{" "}
+            {t("lines {start}-{end} are not in the loaded diff.", {
+              start: excerpt.start,
+              end: excerpt.end,
+            })}
           </span>
           <Button size="xs" variant="outline" onClick={() => onOpenFile(excerpt.path)}>
-            Open in Code
+            {t("Open in Code")}
           </Button>
         </div>
       )}
@@ -324,13 +328,15 @@ function ExcerptDiff({
                 rangeLabel={`${excerpt.path}:${getReviewPositionAnchor(draft.position).line}`}
                 text=""
                 placeholder={
-                  commenting.canComment ? "Add a comment…" : "Ask the agent about these lines…"
+                  commenting.canComment
+                    ? t("Add a comment…")
+                    : t("Ask the agent about these lines…")
                 }
-                submitLabel={commenting.canComment ? "Add to review" : "Ask agent"}
+                submitLabel={commenting.canComment ? t("Add to review") : t("Ask agent")}
                 {...(commenting.canComment && onAskAgent !== null
                   ? {
                       secondaryAction: {
-                        label: "Ask agent",
+                        label: t("Ask agent"),
                         onAction: (text: string) => askAgent(text),
                       },
                     }
@@ -363,7 +369,7 @@ function ExcerptDiff({
             <Button
               size="icon-xs"
               variant="ghost-muted"
-              aria-label={`Open ${excerpt.path} in Code`}
+              aria-label={t("Open {path} in Code", { path: excerpt.path })}
               onClick={() => onOpenFile(excerpt.path)}
             >
               <ArrowUpRightIcon aria-hidden />

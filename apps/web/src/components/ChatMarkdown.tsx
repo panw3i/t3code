@@ -219,6 +219,7 @@ import {
   nodeToPlainText,
 } from "./chat/MarkdownCodeBlock.logic";
 import { reportMarkdownActionFailure } from "./chat/markdownActionFailure";
+import { t } from "~/i18n";
 
 const isAssetNotFoundError = Schema.is(AssetWorkspaceAssetNotFoundError);
 
@@ -282,7 +283,7 @@ function CodexArtifactTemplateCard(props: {
   return (
     <div
       role="group"
-      aria-label={`${props.template.displayName} template`}
+      aria-label={t("{name} template", { name: props.template.displayName })}
       data-chat-markdown-artifact-template
       className="my-[0.65rem] flex w-full min-w-0 items-center gap-3 rounded-xl border border-border/70 bg-card/60 px-3 py-2.5 text-foreground shadow-xs"
       data-artifact-kind={props.template.artifactKind}
@@ -349,31 +350,31 @@ const GITHUB_ALERT_PRESENTATIONS: Record<
   { label: string; Icon: typeof InfoIcon; borderClassName: string; titleClassName: string }
 > = {
   note: {
-    label: "Note",
+    label: t("Note"),
     Icon: InfoIcon,
     borderClassName: "border-blue-500/70",
     titleClassName: "text-blue-600 dark:text-blue-400",
   },
   tip: {
-    label: "Tip",
+    label: t("Tip"),
     Icon: LightbulbIcon,
     borderClassName: "border-emerald-500/70",
     titleClassName: "text-emerald-600 dark:text-emerald-400",
   },
   important: {
-    label: "Important",
+    label: t("Important"),
     Icon: MessageSquareWarningIcon,
     borderClassName: "border-purple-500/70",
     titleClassName: "text-purple-600 dark:text-purple-400",
   },
   warning: {
-    label: "Warning",
+    label: t("Warning"),
     Icon: TriangleAlertIcon,
     borderClassName: "border-amber-500/70",
     titleClassName: "text-amber-600 dark:text-amber-500",
   },
   caution: {
-    label: "Caution",
+    label: t("Caution"),
     Icon: OctagonAlertIcon,
     borderClassName: "border-red-500/70",
     titleClassName: "text-red-600 dark:text-red-400",
@@ -596,7 +597,7 @@ function useChatMarkdownState({
         let description =
           error instanceof Error
             ? error.message
-            : "The file could not be loaded. It may have been moved or deleted.";
+            : t("The file could not be loaded. It may have been moved or deleted.");
         if (
           isAssetNotFoundError(error) &&
           error.resource._tag === "media-file" &&
@@ -613,13 +614,16 @@ function useChatMarkdownState({
               isDesktopRenderer: window.desktopBridge !== undefined,
             }).mode !== "local-exec"
           ) {
-            description = `The file was not found on ${target.label} at ${error.checkedPath ?? error.resource.path}.`;
+            description = t("The file was not found on {label} at {path}.", {
+              label: target.label,
+              path: error.checkedPath ?? error.resource.path,
+            });
           }
         }
         toastManager.add(
           stackedThreadToast({
             type: "error",
-            title: "Media unavailable",
+            title: t("Media unavailable"),
             description,
           }),
         );
@@ -726,7 +730,7 @@ function useChatMarkdownState({
           toastManager.add(
             stackedThreadToast({
               type: "error",
-              title: "Unable to open link in browser",
+              title: t("Unable to open link in browser"),
               description: error.message,
             }),
           );
@@ -1046,7 +1050,7 @@ const CHAT_MARKDOWN_COMPONENTS = {
         {...props}
         type="checkbox"
         name="markdown-task"
-        aria-label="Toggle task"
+        aria-label={t("Toggle task")}
         checked={checked}
         onChange={(event) => {
           const listItemStart = Number(event.currentTarget.closest("li")?.dataset.listItemOffset);
@@ -1091,7 +1095,7 @@ const CHAT_MARKDOWN_COMPONENTS = {
       return environmentId ? (
         <MarkdownThreadLink environmentId={environmentId} link={threadLink} label={label} />
       ) : (
-        <span>{label ?? "Thread"}</span>
+        <span>{label ?? t("Thread")}</span>
       );
     }
     const contextReference = href ? parseComposerContextHref(href) : null;
@@ -1260,9 +1264,10 @@ const CHAT_MARKDOWN_COMPONENTS = {
                       type: "error",
                       title:
                         operation === "link-pull-request-to-thread"
-                          ? "Unable to link pull request"
-                          : "Unable to unlink pull request",
-                      description: cause instanceof Error ? cause.message : "The request failed.",
+                          ? t("Unable to link pull request")
+                          : t("Unable to unlink pull request"),
+                      description:
+                        cause instanceof Error ? cause.message : t("The request failed."),
                     }),
                   );
                 }

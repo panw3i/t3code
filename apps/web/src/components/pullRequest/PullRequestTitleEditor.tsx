@@ -16,6 +16,7 @@ import { PullRequestDetailTitleRow } from "./PullRequestDetailLayout";
 import { PullRequestEditButton } from "./PullRequestEditButton";
 import { readableFailure } from "./pullRequestDetail.logic";
 import { canEditPullRequestChangeRequest } from "@t3tools/client-runtime/pull-request-editing";
+import { t } from "~/i18n";
 
 /** The pull request title, which the reader can rename in place when the host allows it. */
 export function PullRequestTitleEditor({
@@ -54,10 +55,10 @@ export function PullRequestTitleEditor({
     if (result._tag === "Failure") {
       toastManager.add({
         type: "error",
-        title: "The title could not be saved",
+        title: t("The title could not be saved"),
         description: readableFailure(
           squashAtomCommandFailure(result),
-          "The host refused the new title.",
+          t("The host refused the new title."),
         ),
       });
       return;
@@ -81,7 +82,7 @@ export function PullRequestTitleEditor({
         </Tooltip>
         {canEditPullRequestChangeRequest(detail) ? (
           <PullRequestEditButton
-            aria-label="Edit title"
+            aria-label={t("Edit title")}
             onClick={() => setTitleScope({ pullRequestKey, text: detail.title })}
           />
         ) : null}
@@ -115,7 +116,7 @@ export function PullRequestTitleEditor({
           disabled={titleSaving}
           onClick={() => setTitleScope(null)}
         >
-          Cancel
+          {t("Cancel")}
         </Button>
         <Button
           size="xs"
@@ -123,7 +124,7 @@ export function PullRequestTitleEditor({
           disabled={!canWriteSourceControl || titleSaving || titleDraft.trim().length === 0}
           onClick={() => void saveTitle(titleDraft)}
         >
-          {titleSaving ? "Saving..." : "Save"}
+          {titleSaving ? t("Saving...") : t("Save")}
         </Button>
       </div>
     </div>

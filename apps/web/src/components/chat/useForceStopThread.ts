@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { useAtomValue } from "@effect/atom-react";
 import type { EnvironmentId, RunId, ThreadId } from "@t3tools/contracts";
 import { useState } from "react";
@@ -35,7 +36,7 @@ export function useForceStopThread(environmentId: EnvironmentId) {
       const error = squashAtomCommandFailure(result);
       toastManager.add({
         type: "error",
-        title: "Could not force stop the agent",
+        title: t("Could not force stop the agent"),
         description: error instanceof Error ? error.message : undefined,
       });
       return;
@@ -44,14 +45,19 @@ export function useForceStopThread(environmentId: EnvironmentId) {
     if (result.value.outcome === "releasing") {
       toastManager.add({
         type: "info",
-        title: "Turn stopped; the agent is still shutting down",
+        title: t("Turn stopped; the agent is still shutting down"),
       });
     }
     if (result.value.outcome === "shared") {
       toastManager.add({
         type: "info",
-        title: "Turn stopped; the agent process kept running",
-        description: `It is shared with ${others === 0 ? "other" : others} working ${others === 1 ? "thread" : "threads"}. Stop those to free it.`,
+        title: t("Turn stopped; the agent process kept running"),
+        description:
+          others === 1
+            ? t("It is shared with 1 working thread. Stop it to free it.")
+            : t("It is shared with {count} working threads. Stop those to free it.", {
+                count: others,
+              }),
       });
     }
   };

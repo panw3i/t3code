@@ -58,7 +58,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: [apps/web, apps/server]
+        include:
+          - package: apps/web
+            playwright: apps/web/node_modules/playwright/cli.js
+          - package: apps/server
+            playwright: apps/server/node_modules/playwright-core/cli.js
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -78,6 +82,9 @@ jobs:
 
       - name: Install
         run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium for browser tests
+        run: node ${{ matrix.playwright }} install --with-deps --only-shell chromium
 
       - name: Test
         working-directory: ${{ matrix.package }}

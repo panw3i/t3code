@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import type { DeviceHubAccess } from "@t3tools/client-runtime/state/deviceHubAccess";
 import { useAtomMount, useAtomSet, useAtomValue } from "@effect/atom-react";
 import { useRef, useState } from "react";
@@ -57,10 +58,10 @@ export function DeviceAndroidFoldControls(props: {
         setAngle(foldAngle(fold));
         setError(
           controller.signal.aborted
-            ? "Fold command timed out."
+            ? t("Fold command timed out.")
             : cause instanceof Error
               ? cause.message
-              : "Could not change fold posture.",
+              : t("Could not change fold posture."),
         );
       })
       .finally(() => {
@@ -79,7 +80,7 @@ export function DeviceAndroidFoldControls(props: {
               <Button
                 size="icon"
                 variant={fold.posture === "closed" ? "secondary" : "ghost"}
-                aria-label="Fold device"
+                aria-label={t("Fold device")}
                 aria-pressed={fold.posture === "closed"}
                 disabled={pending || !props.enabled}
                 onClick={() => change("closed")}
@@ -88,7 +89,7 @@ export function DeviceAndroidFoldControls(props: {
           >
             <DeviceDuoGlyph pose="closed" />
           </TooltipTrigger>
-          <TooltipPopup side="left">Fold device</TooltipPopup>
+          <TooltipPopup side="left">{t("Fold device")}</TooltipPopup>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger
@@ -96,7 +97,7 @@ export function DeviceAndroidFoldControls(props: {
               <Button
                 size="icon"
                 variant={fold.posture === "opened" ? "secondary" : "ghost"}
-                aria-label="Unfold device"
+                aria-label={t("Unfold device")}
                 aria-pressed={fold.posture === "opened"}
                 disabled={pending || !props.enabled}
                 onClick={() => change("opened")}
@@ -105,7 +106,7 @@ export function DeviceAndroidFoldControls(props: {
           >
             <DeviceDuoGlyph pose="open" />
           </TooltipTrigger>
-          <TooltipPopup side="left">Unfold device</TooltipPopup>
+          <TooltipPopup side="left">{t("Unfold device")}</TooltipPopup>
         </Tooltip>
       </div>
       {error ? (

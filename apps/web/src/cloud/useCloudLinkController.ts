@@ -30,6 +30,7 @@ import {
 } from "./linkEnvironmentAtoms";
 import { readCachedPrimaryCloudLinkState, usePrimaryCloudLinkState } from "./primaryCloudLinkState";
 import { resolveRelayClerkTokenOptions } from "./publicConfig";
+import { t } from "~/i18n";
 
 export interface CloudLinkDesiredState {
   readonly managedTunnel: boolean;
@@ -87,18 +88,19 @@ export function useCloudLinkController() {
   const [tunnelLimit, setTunnelLimit] = useState<number | null>(null);
 
   const reportUpdateFailure = (cause: unknown) => {
-    const message = cause instanceof Error ? cause.message : "Could not update T3 Connect access.";
+    const message =
+      cause instanceof Error ? cause.message : t("Could not update T3 Connect access.");
     const traceId = findErrorTraceId(cause);
     console.error("[t3-connect] Could not update T3 Connect", { message, traceId, cause });
     setOperationError(traceId ? `${message} Trace ID: ${traceId}` : message);
     toastManager.add({
       type: "error",
-      title: "Could not update T3 Connect",
+      title: t("Could not update T3 Connect"),
       description: message,
       data: traceId
         ? {
             secondaryActionProps: {
-              children: "Copy trace ID",
+              children: t("Copy trace ID"),
               onClick: () => void navigator.clipboard?.writeText(traceId),
             },
           }

@@ -26,6 +26,7 @@ import { useSettingsScope } from "./SettingsScopeContext";
 import { RedactedSensitiveText } from "./RedactedSensitiveText";
 import { searchableSetting } from "./settingsSearch";
 import { SettingsPageContainer, SettingsRow, SettingsSection } from "./settingsLayout";
+import { t } from "~/i18n";
 
 const SECRET_PROVIDER_KINDS: Readonly<
   Record<string, { readonly name: string; readonly icon: Icon }>
@@ -114,8 +115,10 @@ function EnvironmentSecretProviders({
         ) : null}
         {entries.length === 0 ? (
           <SettingsRow
-            title="No secret providers configured."
-            description="Add a 1Password account, then pick it as the source of a provider variable."
+            title={t("No secret providers configured.")}
+            description={t(
+              "Add a 1Password account, then pick it as the source of a provider variable.",
+            )}
           />
         ) : (
           entries.map(([id, config]) => {
@@ -141,14 +144,14 @@ function EnvironmentSecretProviders({
                       <span className="shrink-0">{kind.name} ·</span>
                       <RedactedSensitiveText
                         value={classified.account}
-                        ariaLabel="Toggle account visibility"
-                        revealTooltip="Click to reveal account"
-                        hideTooltip="Click to hide account"
+                        ariaLabel={t("Toggle account visibility")}
+                        revealTooltip={t("Click to reveal account")}
+                        hideTooltip={t("Click to hide account")}
                         className="max-w-full truncate"
                       />
                     </span>
                   ) : (
-                    `Unsupported provider (${config.kind})`
+                    t("Unsupported provider ({kind})", { kind: config.kind })
                   )
                 }
                 control={
@@ -204,14 +207,14 @@ function RemoveSecretProviderButton({
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogPopup>
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove {label}?</AlertDialogTitle>
+            <AlertDialogTitle>{t("Remove {label}?", { label })}</AlertDialogTitle>
             <AlertDialogDescription>
               Provider variables that read from {label} stop resolving until a provider with the
               same name is added again. The secrets themselves are untouched.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogClose render={<Button variant="outline" />}>Cancel</AlertDialogClose>
+            <AlertDialogClose render={<Button variant="outline" />}>{t("Cancel")}</AlertDialogClose>
             <Button
               variant="destructive"
               onClick={() => {

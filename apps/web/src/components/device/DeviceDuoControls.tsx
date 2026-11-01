@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import { useState } from "react";
 import {
   duoFoldState,
@@ -16,8 +17,8 @@ const FOLDS = [
   { id: "open", angle: 180 },
 ] as const;
 const STANDS = [
-  { id: "laptop", label: "Laptop stand" },
-  { id: "tent", label: "Tent stand" },
+  { id: "laptop", label: t("Laptop stand") },
+  { id: "tent", label: t("Tent stand") },
 ] as const;
 
 export function DeviceDuoControls(props: {
@@ -36,9 +37,9 @@ export function DeviceDuoControls(props: {
   // correct display frame.
   const foldWaits = props.state.pending && (stand || props.state.requested?.control === "pose");
   const foldLabels = {
-    closed: "Closed",
-    half: phoneVertical ? "Book" : "Laptop",
-    open: "Open",
+    closed: t("Closed"),
+    half: phoneVertical ? t("Book") : t("Laptop"),
+    open: t("Open"),
   };
   const button = (
     key: string,

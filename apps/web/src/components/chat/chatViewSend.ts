@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import {
   CommandId,
   type EnvironmentId,
@@ -108,18 +109,20 @@ export async function startFanoutThread(input: {
     const failureToastId = toastManager.add(
       stackedThreadToast({
         type: "error",
-        title: `Could not start ${input.model}`,
-        description: error instanceof Error ? error.message : "Failed to send message.",
+        title: t("Could not start {model}", { model: input.model }),
+        description: error instanceof Error ? error.message : t("Failed to send message."),
         ...(retainedThreadId
           ? {
               timeout: 0,
               data: {
                 secondaryActionProps: {
-                  children: "Allow retry",
+                  children: t("Allow retry"),
                   onClick: () => {
                     void readLocalApi()
                       ?.dialogs.confirm(
-                        "The previous request may already be running. Check its thread first. Allow another send that could create a duplicate thread?",
+                        t(
+                          "The previous request may already be running. Check its thread first. Allow another send that could create a duplicate thread?",
+                        ),
                       )
                       .then(
                         (confirmed) => {
@@ -137,7 +140,7 @@ export async function startFanoutThread(input: {
                 },
               },
               actionProps: {
-                children: "Open thread",
+                children: t("Open thread"),
                 onClick: () => input.openThread(retainedThreadId),
               },
             }
@@ -247,7 +250,7 @@ export async function rewindToMessage(input: {
     store.addFiles(draftTarget, restoredFiles, { allowDuplicates: true });
     return { error: null, prompt: nextPrompt };
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Failed to revert thread state." };
+    return { error: error instanceof Error ? error.message : t("Failed to revert thread state.") };
   }
 }
 

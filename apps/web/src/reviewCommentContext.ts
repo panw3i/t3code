@@ -3,6 +3,7 @@ import { PullRequestContextMetadata, type PullRequestReviewPosition } from "@t3t
 import * as Schema from "effect/Schema";
 
 import { isLineInFileDiff } from "./components/pullRequest/pullRequestDiff.logic";
+import { t, tPlural } from "~/i18n";
 
 const ReviewCommentSelectionSchema = Schema.Struct({
   start: Schema.Number,
@@ -72,7 +73,7 @@ export function buildFileReviewComment(input: {
   return {
     id: input.id,
     sectionId: `file:${input.filePath}`,
-    sectionTitle: "File comment",
+    sectionTitle: t("File comment"),
     filePath: input.filePath,
     startIndex: startLine - 1,
     endIndex: endLine - 1,
@@ -439,7 +440,7 @@ function formatDiffReviewRangeLabel(lines: ReadonlyArray<DiffReviewLine>): strin
   const firstNumber = firstLine.newLineNumber ?? firstLine.oldLineNumber;
   const lastNumber = lastLine.newLineNumber ?? lastLine.oldLineNumber;
   if (firstNumber === null || lastNumber === null) {
-    return lines.length === 1 ? "line" : `${lines.length} lines`;
+    return tPlural(lines.length, "{count} line", "{count} lines");
   }
 
   const firstMarker = getDiffChangeMarker(firstLine.change).trim();

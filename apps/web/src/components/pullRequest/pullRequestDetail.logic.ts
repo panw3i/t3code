@@ -40,11 +40,12 @@ import {
 import { inferReviewCommentFenceLanguage, type ReviewCommentContext } from "~/reviewCommentContext";
 import { reviewCommentContextId } from "~/lib/composerContextRecords";
 import { removeInlineContextReference } from "~/lib/composerContextReferences";
+import { t } from "~/i18n";
 
 export const PULL_REQUEST_MERGE_METHOD_LABELS: Record<PullRequestMergeMethod, string> = {
-  merge: "Merge",
-  squash: "Squash and merge",
-  rebase: "Rebase and merge",
+  merge: t("Merge"),
+  squash: t("Squash and merge"),
+  rebase: t("Rebase and merge"),
 };
 
 export function allowsSinglePullRequestMerge(input: {
@@ -241,14 +242,14 @@ export function threadPullRequestPanelTarget(thread: {
 export function pullRequestHandoffLabels(inThisThread: boolean) {
   return inThisThread
     ? {
-        fixFinding: "Fix in this thread",
-        fixCheck: "Fix in this thread",
-        fixFindings: "Fix findings in this thread",
+        fixFinding: t("Fix in this thread"),
+        fixCheck: t("Fix in this thread"),
+        fixFindings: t("Fix findings in this thread"),
       }
     : {
-        fixFinding: "Fix in a thread",
-        fixCheck: "Fix",
-        fixFindings: "Fix findings in a thread",
+        fixFinding: t("Fix in a thread"),
+        fixCheck: t("Fix"),
+        fixFindings: t("Fix findings in a thread"),
       };
 }
 
@@ -320,7 +321,7 @@ export function classifyPullRequestChecks(
 }
 
 export function describePullRequestChecks(checks: ReadonlyArray<PullRequestCheck>): string {
-  if (checks.length === 0) return "No checks reported";
+  if (checks.length === 0) return t("No checks reported");
   const failed = checks.filter(
     (check) => check.status === "failure" || check.status === "cancelled",
   ).length;
@@ -329,12 +330,17 @@ export function describePullRequestChecks(checks: ReadonlyArray<PullRequestCheck
   const passed = checks.filter((check) => check.status === "success").length;
   const parts: string[] = [];
   if (pending > 0) parts.push(`${pending} of ${checks.length} running`);
-  if (actionRequired > 0) parts.push(`${actionRequired} of ${checks.length} awaiting action`);
+  if (actionRequired > 0)
+    parts.push(
+      t("{count} of {total} awaiting action", { count: actionRequired, total: checks.length }),
+    );
   if (failed > 0) {
     parts.push(parts.length > 0 ? `${failed} failed` : `${failed} of ${checks.length} failing`);
   }
   if (parts.length === 0) {
-    return passed === checks.length ? "All checks passed" : `${passed} of ${checks.length} passing`;
+    return passed === checks.length
+      ? t("All checks passed")
+      : t("{passed} of {total} passing", { passed, total: checks.length });
   }
   return parts.join(" · ");
 }
@@ -669,7 +675,7 @@ export function buildPullRequestTimeline(
       id: "created",
       at: detail.createdAt,
       kind: "opened" as const,
-      title: `opened this ${term}`,
+      title: t("opened this {term}", { term }),
       body: null,
       markdown: false,
       url: null,
@@ -685,7 +691,7 @@ export function buildPullRequestTimeline(
       id: commit.oid,
       at: commit.committedDate,
       kind: "commit" as const,
-      title: `Commit ${commit.oid.slice(0, 7)}`,
+      title: t("Commit {sha}", { sha: commit.oid.slice(0, 7) }),
       body: commit.messageHeadline || null,
       markdown: false,
       url: null,

@@ -20,6 +20,7 @@ import {
 } from "./guideRunStore";
 import { stepTourPosition, stopFilePaths } from "@t3tools/client-runtime/review-guide-tour";
 import { useGuideDiffFiles } from "./useGuideDiffFiles";
+import { t } from "~/i18n";
 
 export function GuideTour({
   environmentId,
@@ -108,7 +109,9 @@ export function GuideTour({
             </p>
           ) : null}
           {stop === null ? (
-            <p className="text-sm text-muted-foreground">This change has no files to tour.</p>
+            <p className="text-sm text-muted-foreground">
+              {t("This change has no files to tour.")}
+            </p>
           ) : (
             <GuideStop
               key={position}

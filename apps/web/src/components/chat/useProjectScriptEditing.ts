@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import type {
   KeybindingCommand,
   ProjectId,
@@ -251,15 +252,15 @@ export function useProjectScriptEditing(input: {
     if (result._tag === "Success") {
       toastManager.add({
         type: "success",
-        title: `Deleted action "${deletedName ?? "Unknown"}"`,
+        title: t('Deleted action "{name}"', { name: deletedName ?? t("Unknown") }),
       });
     } else if (!isAtomCommandInterrupted(result)) {
       const error = squashAtomCommandFailure(result);
       toastManager.add(
         stackedThreadToast({
           type: "error",
-          title: "Could not delete action",
-          description: error instanceof Error ? error.message : "An unexpected error occurred.",
+          title: t("Could not delete action"),
+          description: error instanceof Error ? error.message : t("An unexpected error occurred."),
         }),
       );
     }

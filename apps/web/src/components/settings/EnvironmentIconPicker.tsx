@@ -19,16 +19,17 @@ import {
   MenuSubPopup,
   MenuSubTrigger,
 } from "../ui/menu";
+import { t } from "~/i18n";
 
 export function resolveEnvironmentIconPickerLock(input: {
   readonly serverConfig: Pick<ServerConfig, "environment"> | null;
   readonly operateAccess: "granted" | "denied" | "pending";
 }): string | null {
   if (input.serverConfig === null) {
-    return "Connect to this environment to change its icon.";
+    return t("Connect to this environment to change its icon.");
   }
   if (input.operateAccess !== "granted") {
-    return "Your session on this environment cannot change its settings.";
+    return t("Your session on this environment cannot change its settings.");
   }
   return null;
 }
@@ -52,7 +53,7 @@ export function EnvironmentIconMenu({
     <MenuSub>
       <MenuSubTrigger>
         <EnvironmentMachineIcon kind={resolved} />
-        Icon
+        {t("Icon")}
       </MenuSubTrigger>
       <MenuSubPopup>
         {lock !== null ? (
@@ -79,7 +80,7 @@ export function EnvironmentIconMenu({
                 </span>
                 {kind === detected ? (
                   <span className="shrink-0 text-xs text-muted-foreground">
-                    {serverConfig?.environment.platform.machine ? "detected" : "default"}
+                    {serverConfig?.environment.platform.machine ? t("detected") : t("default")}
                   </span>
                 ) : null}
               </span>

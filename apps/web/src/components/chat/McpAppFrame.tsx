@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import type { EnvironmentId, ThreadId, TurnItemId } from "@t3tools/contracts";
 import {
   makeMcpAppHost,
@@ -304,7 +305,9 @@ export function McpAppFrame(props: {
       sendMessage: async (text) => {
         const send = readLive().props.onSendMessage;
         if (send === undefined) throw new McpAppHostRefusal("Messages are not available here.");
-        const approved = await ask(`Send this message from ${app.server}?\n${text}`);
+        const approved = await ask(
+          `${t("Send this message from {server}?", { server: app.server })}\n${text}`,
+        );
         if (approved !== true) throw new McpAppHostRefusal("Declined by the user.");
         await send(text);
       },
@@ -416,7 +419,7 @@ export function McpAppFrame(props: {
             setClosed(false);
           }}
         >
-          Show app
+          {t("Show app")}
         </Button>
       </div>
     );
@@ -448,7 +451,7 @@ export function McpAppFrame(props: {
           >
             <span className="truncate">{app.server}</span>
             <Button
-              aria-label="Exit full screen"
+              aria-label={t("Exit full screen")}
               size="icon-sm"
               variant="ghost"
               onClick={() => setDisplayMode("inline")}
@@ -459,13 +462,13 @@ export function McpAppFrame(props: {
         ) : null}
         {navigatedAway ? (
           <p className="flex size-full items-center justify-center text-muted-foreground text-xs">
-            The {app.server} app left its page and was stopped
+            {t("The {server} app left its page and was stopped", { server: app.server })}
           </p>
         ) : src !== null ? (
           <iframe
             ref={attachFrame}
             src={src}
-            title={`${app.server} app`}
+            title={t("{server} app", { server: app.server })}
             // Omitting allow-same-origin isolates the app from the session.
             sandbox="allow-scripts allow-forms"
             allow={mcpAppAllowAttribute(app.permissions)}

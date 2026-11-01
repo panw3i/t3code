@@ -2990,8 +2990,8 @@ export default function Sidebar({ routeReveal }: { routeReveal: SidebarRouteReve
                     className="max-w-[min(18rem,var(--available-width))] overflow-hidden"
                   >
                     <ComboboxSearchInput
-                      aria-label={t(t("Search projects"))}
-                      placeholder={t(t("Search projects..."))}
+                      aria-label={t("Search projects")}
+                      placeholder={t("Search projects...")}
                       value={projectScopeMenuState.query}
                       onKeyDown={(event) => {
                         if (
@@ -3119,7 +3119,7 @@ export default function Sidebar({ routeReveal }: { routeReveal: SidebarRouteReve
                 <ul
                   id="sidebar-thread-search-results"
                   role="listbox"
-                  aria-label={t(t("Thread search results"))}
+                  aria-label={t("Thread search results")}
                   className="flex flex-col gap-px"
                 >
                   {threadSearchResults.map((thread, index) => {
@@ -3374,7 +3374,7 @@ export default function Sidebar({ routeReveal }: { routeReveal: SidebarRouteReve
                               <SidebarDragBoundary
                                 key="pinned-header"
                                 marker="pinned-header"
-                                label={t(t("Pinned"))}
+                                label={t("Pinned")}
                                 visible={from !== null}
                                 isDropTarget={dragTargetSection === "pinned"}
                               />,
@@ -3385,7 +3385,7 @@ export default function Sidebar({ routeReveal }: { routeReveal: SidebarRouteReve
                               <SidebarDragBoundary
                                 key="pinned-divider"
                                 marker="pinned-divider"
-                                label={t(t("Active"))}
+                                label={t("Active")}
                                 visible={from !== null}
                                 isDropTarget={dragTargetSection === "active"}
                               />,
@@ -3396,7 +3396,7 @@ export default function Sidebar({ routeReveal }: { routeReveal: SidebarRouteReve
                               <SidebarSectionPlaceholder
                                 key="active-placeholder"
                                 marker="active-placeholder"
-                                label={t(t("Active"))}
+                                label={t("Active")}
                                 showHint={
                                   from !== null &&
                                   (activeThreads.length === 0 ||
@@ -3415,7 +3415,7 @@ export default function Sidebar({ routeReveal }: { routeReveal: SidebarRouteReve
                                 key="working-shelf-header"
                                 marker="working-header"
                                 className="mt-auto"
-                                label={t(t("Working"))}
+                                label={t("Working")}
                                 count={workingThreads.length}
                                 toggle={{
                                   expanded: workingShelfExpanded,
@@ -3430,7 +3430,7 @@ export default function Sidebar({ routeReveal }: { routeReveal: SidebarRouteReve
                                 key="snoozed-shelf-header"
                                 marker="snoozed-header"
                                 className={cn(workingThreads.length === 0 && "mt-auto")}
-                                label={t(t("Snoozed"))}
+                                label={t("Snoozed")}
                                 count={snoozedThreads.length}
                                 toggle={{
                                   expanded: snoozedShelfExpanded,
@@ -3447,7 +3447,7 @@ export default function Sidebar({ routeReveal }: { routeReveal: SidebarRouteReve
                                 className={cn(
                                   workingThreads.length + snoozedThreads.length === 0 && "mt-auto",
                                 )}
-                                label={t(t("Settled"))}
+                                label={t("Settled")}
                                 count={settledCount}
                                 dragging={from !== null}
                                 isDropTarget={dragTargetSection === "settled"}
@@ -3463,7 +3463,7 @@ export default function Sidebar({ routeReveal }: { routeReveal: SidebarRouteReve
                               <SidebarSectionPlaceholder
                                 key="settled-placeholder"
                                 marker="settled-placeholder"
-                                label={t(t("Settled"))}
+                                label={t("Settled")}
                                 showHint={
                                   from !== null &&
                                   (renderedSettledThreads.length === 0 ||

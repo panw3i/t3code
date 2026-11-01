@@ -16,6 +16,7 @@ import {
   usePullRequestActionRunner,
   usePullRequestDefaultMergeMethodResolver,
 } from "./usePullRequestActions";
+import { t } from "~/i18n";
 
 type PullRequestSpeedActionEntry = Pick<
   EnvironmentPullRequestEntry,
@@ -83,7 +84,10 @@ export function PullRequestSpeedActions<Entry extends PullRequestSpeedActionEntr
     <SpeedModeGroup
       busy={busy}
       pending={actionPending || closing}
-      label={`Quick actions for ${terminology.singular} #${entry.number}`}
+      label={t("Quick actions for {kind} #{number}", {
+        kind: terminology.singular,
+        number: entry.number,
+      })}
     >
       {actions.map((action) => {
         const label = ACTIONS[action].label;
@@ -111,9 +115,9 @@ export function PullRequestSpeedActions<Entry extends PullRequestSpeedActionEntr
             </TooltipTrigger>
             <TooltipPopup>
               {action === "merge" && entry.stack
-                ? `Open this ${terminology.singular} to merge its stack`
+                ? t("Open this {kind} to merge its stack", { kind: terminology.singular })
                 : action === "close" && onCloseSweepStart
-                  ? "Close immediately, or drag across rows to close several"
+                  ? t("Close immediately, or drag across rows to close several")
                   : `${label} immediately`}
             </TooltipPopup>
           </Tooltip>
@@ -163,8 +167,8 @@ function SpeedModeGroup({
 }
 
 const ACTIONS = {
-  close: { label: "Close", Icon: PullRequestGlyph.closed },
-  merge: { label: "Merge", Icon: PullRequestGlyph.merged },
-  ready: { label: "Ready for review", Icon: PullRequestGlyph.pullRequest },
-  reopen: { label: "Reopen", Icon: PullRequestGlyph.reopen },
+  close: { label: t("Close"), Icon: PullRequestGlyph.closed },
+  merge: { label: t("Merge"), Icon: PullRequestGlyph.merged },
+  ready: { label: t("Ready for review"), Icon: PullRequestGlyph.pullRequest },
+  reopen: { label: t("Reopen"), Icon: PullRequestGlyph.reopen },
 } as const;

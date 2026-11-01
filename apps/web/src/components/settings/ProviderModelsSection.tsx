@@ -385,7 +385,7 @@ export function ProviderModelsSection({
                 ? groupLabel(t("All"), index === 0)
                 : null}
               {startsGroup && group === "hidden"
-                ? groupLabel(t(t("Hidden from picker")), index === 0)
+                ? groupLabel(t("Hidden from picker"), index === 0)
                 : null}
               {renderRow(model)}
               {editingEntry ? (

@@ -17,6 +17,7 @@ import { getLocalStorageItem, setLocalStorageItem, useLocalStorage } from "./hoo
 import { shellEnvironment } from "./state/shell";
 import { useAtomCommand } from "./state/use-atom-command";
 import { readEnvironmentScope } from "./state/session";
+import { t } from "~/i18n";
 
 const LAST_EDITOR_KEY = "t3code:last-editor";
 
@@ -27,7 +28,7 @@ export class PreferredEditorEnvironmentRequiredError extends Schema.TaggedError<
   },
 ) {
   override get message(): string {
-    return `Cannot open ${this.targetPath} because no environment is selected.`;
+    return t("Cannot open {path} because no environment is selected.", { path: this.targetPath });
   }
 }
 
@@ -40,7 +41,10 @@ export class PreferredEditorUnavailableError extends Schema.TaggedError<Preferre
   },
 ) {
   override get message(): string {
-    return `No available editor can open ${this.targetPath} in environment ${this.environmentId}.`;
+    return t("No available editor can open {path} in environment {environment}.", {
+      path: this.targetPath,
+      environment: this.environmentId,
+    });
   }
 }
 
@@ -98,7 +102,7 @@ export function useOpenInPreferredEditor(
         Cause.fail(
           new EnvironmentAuthorizationError({
             requiredScope: AuthOrchestrationOperateScope,
-            message: "This connection cannot open an editor on this environment.",
+            message: t("This connection cannot open an editor on this environment."),
           }),
         ),
       );

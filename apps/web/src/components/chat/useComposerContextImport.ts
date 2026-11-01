@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import {
   ConnectionBlockedError,
   ConnectionTransientError,
@@ -161,8 +162,8 @@ export function useComposerContextImport(input: {
     const fail = (reason: string) => {
       toastManager.add({
         type: "error",
-        title: `Couldn't bring ${record.name} into this message`,
-        description: `${reason} Remove the chip or attach the file again.`,
+        title: t("Couldn't bring {name} into this message", { name: record.name }),
+        description: `${reason} ${t("Remove the chip or attach the file again.")}`,
       });
     };
     let file = copiedComposerAttachmentFile(sourceEnvironmentId, record.attachmentId);

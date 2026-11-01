@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import {
   type EnvironmentId,
   type ProviderInteractionMode,
@@ -129,7 +130,7 @@ export function useComposerResume(input: ComposerResumeInput) {
           message: {
             messageId: newMessageId(),
             role: "user",
-            text: "Continue where you left off.",
+            text: t("Continue where you left off."),
             attachments: [],
           },
           runtimeMode,
@@ -147,7 +148,7 @@ export function useComposerResume(input: ComposerResumeInput) {
         const error = squashAtomCommandFailure(result);
         setThreadError(
           threadId,
-          error instanceof Error ? error.message : "Could not resume thread.",
+          error instanceof Error ? error.message : t("Could not resume thread."),
         );
       }
     } else {

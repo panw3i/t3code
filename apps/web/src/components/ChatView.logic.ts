@@ -104,6 +104,7 @@ import {
   resolveSelectableProviderInstanceEntry,
   type ProviderInstanceEntry,
 } from "../providerInstances";
+import { t, tPlural } from "~/i18n";
 
 type ThreadProjection = EnvironmentThread["projection"];
 type ThreadStructureRow = ThreadStructure["visibleTurnItems"][number];
@@ -126,13 +127,17 @@ export function agentControlledBrowserCloseConfirmation(
   if (activeBrowserCount === 0) return null;
   if (activeBrowserCount === 1) {
     return [
-      "Close browser while the agent is using it?",
-      "The agent is actively controlling this browser. Closing it may interrupt the current browser action.",
+      t("Close browser while the agent is using it?"),
+      t(
+        "The agent is actively controlling this browser. Closing it may interrupt the current browser action.",
+      ),
     ].join("\n");
   }
   return [
-    `Close ${activeBrowserCount} browsers while the agent is using them?`,
-    "The agent is actively controlling these browsers. Closing them may interrupt the current browser actions.",
+    t("Close {count} browsers while the agent is using them?", { count: activeBrowserCount }),
+    t(
+      "The agent is actively controlling these browsers. Closing them may interrupt the current browser actions.",
+    ),
   ].join("\n");
 }
 
@@ -452,7 +457,7 @@ export function buildLocalDraftThread(
   return presentThreadShell(draftThread.environmentId, {
     id: threadId,
     projectId: draftThread.projectId,
-    title: "New thread",
+    title: t("New thread"),
     providerInstanceId: fallbackModelSelection.instanceId,
     modelSelection: fallbackModelSelection,
     runtimeMode: draftThread.runtimeMode,
@@ -562,23 +567,23 @@ export function getAntigravitySendBlockReason(
 ): string | null {
   if (provider?.driver !== "antigravity") return null;
   if (!provider.installed) {
-    return "Install Antigravity in provider settings before sending.";
+    return t("Install Antigravity in provider settings before sending.");
   }
   if (provider.auth.status === "unauthenticated") {
-    return "Sign in to Antigravity in provider settings before sending.";
+    return t("Sign in to Antigravity in provider settings before sending.");
   }
   const slug = model.trim();
-  if (slug.length === 0) return "Choose an Antigravity model before sending.";
+  if (slug.length === 0) return t("Choose an Antigravity model before sending.");
   if (provider.auth.status === "unknown") return null;
   if (provider.models.length === 0) {
-    return "Refresh Antigravity models in provider settings before sending.";
+    return t("Refresh Antigravity models in provider settings before sending.");
   }
   if (
     provider.status === "ready" &&
     slug !== ANTIGRAVITY_DEFAULT_MODEL &&
     !provider.models.some((entry) => entry.slug === slug || entry.aliases?.includes(slug))
   ) {
-    return "That Antigravity model is no longer available. Choose another model.";
+    return t("That Antigravity model is no longer available. Choose another model.");
   }
   return null;
 }
@@ -781,16 +786,23 @@ export function buildExpiredTerminalContextToastCopy(
   variant: "omitted" | "empty",
 ): { title: string; description: string } {
   const count = Math.max(1, Math.floor(expiredTerminalContextCount));
-  const noun = count === 1 ? "Expired terminal context" : "Expired terminal contexts";
   if (variant === "empty") {
     return {
-      title: `${noun} won't be sent`,
-      description: "Remove it or re-add it to include terminal output.",
+      title: tPlural(
+        count,
+        "Expired terminal context won't be sent",
+        "Expired terminal contexts won't be sent",
+      ),
+      description: t("Remove it or re-add it to include terminal output."),
     };
   }
   return {
-    title: `${noun} omitted from message`,
-    description: "Re-add it if you want that terminal output included.",
+    title: tPlural(
+      count,
+      "Expired terminal context omitted from message",
+      "Expired terminal contexts omitted from message",
+    ),
+    description: t("Re-add it if you want that terminal output included."),
   };
 }
 
@@ -936,8 +948,8 @@ export function getStartedThreadModelChangeBlockReason(input: {
     return null;
   }
   return {
-    title: "Start a new chat to switch providers",
-    description: "This thread does not support switching providers after it has started.",
+    title: t("Start a new chat to switch providers"),
+    description: t("This thread does not support switching providers after it has started."),
   };
 }
 
@@ -1274,7 +1286,7 @@ export type LocalThreadErrorEntry = {
 };
 
 export function chatActionErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : "An error occurred.";
+  return error instanceof Error ? error.message : t("An error occurred.");
 }
 
 export function releaseChatTimelineAnchor<T extends { readonly messageId: MessageId | null }>(
@@ -1343,7 +1355,11 @@ export function makeModelDisabledReason(
       ...context,
       nextModelSelection: { instanceId, model },
     });
-    return reason ? `${reason.description} Start a new thread to use this model.` : null;
+    return reason
+      ? t("{description} Start a new thread to use this model.", {
+          description: reason.description,
+        })
+      : null;
   };
 }
 
@@ -1487,7 +1503,9 @@ export function sendTitleFallbackLabels(snapshot: ComposerSendSnapshot) {
   const previewAnnotation = snapshot.previewAnnotations[0];
   return [
     terminalContext ? formatTerminalContextLabel(terminalContext) : undefined,
-    reviewComment ? `Review: ${reviewCommentContextLabel(reviewComment)}` : undefined,
+    reviewComment
+      ? t("Review: {label}", { label: reviewCommentContextLabel(reviewComment) })
+      : undefined,
     previewAnnotation ? previewAnnotationContextLabel(previewAnnotation) : undefined,
   ];
 }

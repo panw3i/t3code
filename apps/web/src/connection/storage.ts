@@ -39,6 +39,7 @@ import * as Schema from "effect/Schema";
 import * as Semaphore from "effect/Semaphore";
 import * as Stream from "effect/Stream";
 import { projectFaviconCache } from "../assets/projectFaviconCache";
+import { t } from "~/i18n";
 
 const DATABASE_NAME = "t3code:connection-runtime";
 const DATABASE_VERSION = 4;
@@ -404,7 +405,7 @@ export function makeCatalogBackend(database: DatabaseHandle): CatalogBackend {
               : Effect.fail(
                   catalogError(
                     "save",
-                    "Desktop secure storage is unavailable in this system context.",
+                    t("Desktop secure storage is unavailable in this system context."),
                   ),
                 ),
           ),
@@ -576,7 +577,7 @@ export function makeBrowserPullRequestRoutingPermissions(
       if (connectionKey === null)
         return yield* new ConnectionBlockedError({
           reason: "configuration",
-          detail: "This environment does not have a saved connection endpoint.",
+          detail: t("This environment does not have a saved connection endpoint."),
         });
       return yield* write(
         entry.target.environmentId,

@@ -1,5 +1,6 @@
+import { t } from "~/i18n";
 export const CODE_BLOCK_LANGUAGES = [
-  { id: "", label: "Plain text" },
+  { id: "", label: t("Plain text") },
   { id: "asm", label: "Assembly" },
   { id: "bash", label: "Bash" },
   { id: "c", label: "C" },

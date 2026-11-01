@@ -44,6 +44,7 @@ import {
   type TerminalContextDraft,
 } from "./terminalContext";
 import type { ReviewCommentContext } from "~/reviewCommentContext";
+import { t, tPlural } from "~/i18n";
 
 const PREVIEW_LABEL_MAX_CHARS = 48;
 
@@ -114,7 +115,7 @@ export function previewAnnotationContextLabel(annotation: PreviewAnnotationPaylo
       ? `${comment.slice(0, PREVIEW_LABEL_MAX_CHARS - 1)}…`
       : comment;
   }
-  return annotation.pageTitle?.trim() || "Preview annotation";
+  return annotation.pageTitle?.trim() || t("Preview annotation");
 }
 
 export function terminalContextReference(context: TerminalContextDraft): ComposerContextReference {
@@ -214,11 +215,16 @@ export function reviewCommentContextRecord(
 
 function previewAnnotationTargetSummary(annotation: PreviewAnnotationPayload): string {
   const parts: string[] = [];
-  const plural = (count: number, noun: string) => `${count} ${noun}${count === 1 ? "" : "s"}`;
   if (annotation.elements.length > 0)
-    parts.push(plural(annotation.elements.length, "selected element"));
-  if (annotation.regions.length > 0) parts.push(plural(annotation.regions.length, "marked region"));
-  if (annotation.strokes.length > 0) parts.push(plural(annotation.strokes.length, "drawing"));
+    parts.push(
+      tPlural(annotation.elements.length, "{count} selected element", "{count} selected elements"),
+    );
+  if (annotation.regions.length > 0)
+    parts.push(
+      tPlural(annotation.regions.length, "{count} marked region", "{count} marked regions"),
+    );
+  if (annotation.strokes.length > 0)
+    parts.push(tPlural(annotation.strokes.length, "{count} drawing", "{count} drawings"));
   return parts.join(", ");
 }
 

@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import type { ProviderDriverKind, ProviderOptionDescriptor } from "@t3tools/contracts";
 import { getProviderOptionCurrentValue } from "@t3tools/shared/model";
 import { ZapIcon } from "lucide-react";
@@ -11,7 +12,7 @@ export function getTraitsSpeedDisplay(
 ): { label: string; speedIcon: "fast" | "ultrafast" | null } | null {
   if (descriptor.id === "fastMode" && descriptor.type === "boolean") {
     return {
-      label: descriptor.currentValue === true ? "Fast" : "Normal",
+      label: descriptor.currentValue === true ? t("Fast") : t("Normal"),
       speedIcon: descriptor.currentValue === true ? "fast" : null,
     };
   }
@@ -27,7 +28,7 @@ export function getTraitsSpeedDisplay(
     (ultrafastTier && currentValue === ultrafastTier.id)
   ) {
     return {
-      label: descriptor.options.find(({ id }) => id === currentValue)?.label ?? "Normal",
+      label: descriptor.options.find(({ id }) => id === currentValue)?.label ?? t("Normal"),
       speedIcon:
         ultrafastTier && currentValue === ultrafastTier.id
           ? "ultrafast"
@@ -63,7 +64,7 @@ export function TraitsSpeedIcon({
         )}
       />
       <span className="sr-only">
-        {speedIcon === "ultrafast" ? "Ultrafast mode on" : "Fast mode on"}
+        {speedIcon === "ultrafast" ? t("Ultrafast mode on") : t("Fast mode on")}
       </span>
     </>
   );

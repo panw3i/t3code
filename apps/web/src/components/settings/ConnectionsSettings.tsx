@@ -829,7 +829,7 @@ export function ConnectionsSettings({ view }: { readonly view: "environments" | 
               disabled={isUpdatingWslBackend}
               onClick={() => handleSelectWslMode(BACKEND_VALUE_WSL_OFF)}
             >
-              {t(t("Switch to Windows"))}
+              {t("Switch to Windows")}
             </Button>
           }
         />

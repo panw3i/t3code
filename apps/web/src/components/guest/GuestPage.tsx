@@ -1,3 +1,4 @@
+import { t } from "~/i18n";
 import {
   EnvironmentId,
   GUEST_MESSAGE_MAX_LENGTH,
@@ -142,7 +143,7 @@ async function fetchGuestHistoryPage(
   shareId: string,
   cursor: string,
 ): Promise<OrchestrationV2ThreadHistoryPage | string> {
-  const failed = "Could not load earlier turns. Try again.";
+  const failed = t("Could not load earlier turns. Try again.");
   try {
     const response = await fetch(
       `${GUEST_HISTORY_ROUTE}?${GUEST_SHARE_PARAM}=${encodeURIComponent(shareId)}&cursor=${encodeURIComponent(cursor)}`,
@@ -156,7 +157,7 @@ async function fetchGuestHistoryPage(
     }
     return Option.getOrElse(decodeHistoryPage(json), () => failed);
   } catch {
-    return "Could not reach the server.";
+    return t("Could not reach the server.");
   }
 }
 
@@ -179,18 +180,18 @@ async function postGuest(
     if (response.ok) return null;
     const json: unknown = await response.json().catch(() => null);
     return Option.match(decodeErrorBody(json), {
-      onNone: () => "Something went wrong. Try again.",
+      onNone: () => t("Something went wrong. Try again."),
       onSome: ({ message }) => message,
     });
   } catch {
-    return "Could not reach the server.";
+    return t("Could not reach the server.");
   }
 }
 
 const STATUS_LABEL: Record<ThreadGuestMessageStatus, string> = {
-  pending: "Waiting for approval",
-  sent: "Sent",
-  dismissed: "Not sent",
+  pending: t("Waiting for approval"),
+  sent: t("Sent"),
+  dismissed: t("Not sent"),
 };
 
 /** Same column as the owner's timeline, so both views wrap text at the same width. */
@@ -236,7 +237,7 @@ export function GuestPage() {
   return (
     <div className="flex h-dvh flex-col bg-background text-foreground">
       {access === "checking" ? (
-        <Notice title="Connecting..." />
+        <Notice title={t("Connecting...")} />
       ) : access === "name" && credential !== null ? (
         <NameForm
           credential={credential}
@@ -250,8 +251,8 @@ export function GuestPage() {
         <GuestSession shareId={shareId} />
       ) : (
         <Notice
-          title="This link has ended or is not valid"
-          detail="Ask the owner for a new link. Each link works in one browser."
+          title={t("This link has ended or is not valid")}
+          detail={t("Ask the owner for a new link. Each link works in one browser.")}
         />
       )}
     </div>
@@ -318,10 +319,15 @@ function GuestSession({ shareId }: { readonly shareId: string }) {
   }, [shareId]);
 
   if (stream.ended || (rejected && stream.view !== null)) {
-    return <Notice title="This link has ended" detail="The owner stopped sharing this thread." />;
+    return (
+      <Notice
+        title={t("This link has ended")}
+        detail={t("The owner stopped sharing this thread.")}
+      />
+    );
   }
   if (stream.view !== null) {
-    if (stream.projection === null) return <Notice title="Connecting..." />;
+    if (stream.projection === null) return <Notice title={t("Connecting...")} />;
     return (
       <GuestThread
         view={stream.view}
@@ -331,11 +337,11 @@ function GuestSession({ shareId }: { readonly shareId: string }) {
       />
     );
   }
-  if (!rejected) return <Notice title="Connecting..." />;
+  if (!rejected) return <Notice title={t("Connecting...")} />;
   return (
     <Notice
-      title="This link has ended or is not valid"
-      detail="Ask the owner for a new link. Each link works in one browser."
+      title={t("This link has ended or is not valid")}
+      detail={t("Ask the owner for a new link. Each link works in one browser.")}
     />
   );
 }
@@ -371,9 +377,9 @@ function NameForm({
   };
   return (
     <form className="m-auto flex w-full max-w-xs flex-col gap-3 p-6" onSubmit={submit}>
-      <h1 className="text-base font-medium">Join a shared thread</h1>
+      <h1 className="text-base font-medium">{t("Join a shared thread")}</h1>
       <label className="flex flex-col gap-1.5 text-sm" htmlFor="guest-name">
-        Your name
+        {t("Your name")}
         <Input
           id="guest-name"
           autoFocus
@@ -389,10 +395,10 @@ function NameForm({
         </p>
       ) : null}
       <Button type="submit" disabled={submitting || name.trim() === ""}>
-        Join
+        {t("Join")}
       </Button>
       <p className="text-xs text-muted-foreground">
-        The owner sees your name and approves each message before the agent gets it.
+        {t("The owner sees your name and approves each message before the agent gets it.")}
       </p>
     </form>
   );
@@ -598,7 +604,7 @@ function UnplacedGuestMessage({
   const url = (attachment: { readonly id: string }) => guestAttachmentUrl(shareId, attachment.id);
   return (
     <div className="flex flex-col items-end gap-1">
-      <GuestMessageName name="You" />
+      <GuestMessageName name={t("You")} />
       <div
         className={cn(
           BUBBLE,
@@ -626,7 +632,7 @@ function GuestModelLabel({ model }: { readonly model: GuestThreadModel }) {
   return (
     <ComposerControl
       render={<span />}
-      aria-label={`Model: ${fullLabel}`}
+      aria-label={t("Model: {model}", { model: fullLabel })}
       className="pointer-events-none min-w-0 shrink"
     >
       {model.driver === null ? null : (
@@ -766,7 +772,7 @@ function GuestComposer({
               <Button
                 size="icon-xs"
                 variant="ghost-muted"
-                aria-label={`Remove ${staged.file.name}`}
+                aria-label={t("Remove {name}", { name: staged.file.name })}
                 onClick={() => {
                   setError(null);
                   setFiles((current) => current.filter((candidate) => candidate !== staged));
@@ -779,8 +785,8 @@ function GuestComposer({
         </ul>
       ) : null}
       <textarea
-        aria-label="Message"
-        placeholder="Message"
+        aria-label={t("Message")}
+        placeholder={t("Message")}
         rows={2}
         maxLength={GUEST_MESSAGE_MAX_LENGTH}
         value={text}

@@ -263,7 +263,7 @@ function AddProjectToMachineDialog({ request }: { request: AddProjectToMachineRe
                     }}
                     items={targets.map((t) => ({ value: t.environmentId, label: t.label }))}
                   >
-                    <SelectTrigger size="sm" aria-label={t(t("Machine to add the project to"))}>
+                    <SelectTrigger size="sm" aria-label={t("Machine to add the project to")}>
                       {target ? (
                         <EnvironmentMachineIcon kind={target.machine} className="size-3.5" />
                       ) : null}
@@ -298,7 +298,7 @@ function AddProjectToMachineDialog({ request }: { request: AddProjectToMachineRe
               <Label>{t("Clone over")}</Label>
               {sshUrl && httpsUrl ? (
                 <ToggleGroup
-                  aria-label={t(t("Clone protocol"))}
+                  aria-label={t("Clone protocol")}
                   value={protocol ? [protocol] : []}
                   onValueChange={(next) => {
                     const value = next[0];
@@ -392,7 +392,7 @@ function AddProjectToMachineDialog({ request }: { request: AddProjectToMachineRe
             <Button type="submit" disabled={unavailable || submitting}>
               {submitting
                 ? t("Starting…")
-                : t("Clone to {machine}", { machine: target?.label ?? t(t("machine")) })}
+                : t("Clone to {machine}", { machine: target?.label ?? t("machine") })}
             </Button>
           </DialogFooter>
         </form>

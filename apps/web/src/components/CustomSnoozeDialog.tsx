@@ -112,7 +112,7 @@ function CustomSnoozeDialog() {
           <DialogPanel>
             <div className="flex flex-col gap-4">
               <ToggleGroup
-                aria-label={t(t("Schedule type"))}
+                aria-label={t("Schedule type")}
                 className="w-full *:flex-1"
                 value={[mode]}
                 onValueChange={(next) => {
@@ -146,7 +146,7 @@ function CustomSnoozeDialog() {
                           })}
                           <CalendarIcon className="size-4 text-muted-foreground" />
                         </PopoverTrigger>
-                        <PopoverPopup align="start" aria-label={t(t("Choose snooze date"))}>
+                        <PopoverPopup align="start" aria-label={t("Choose snooze date")}>
                           <Calendar
                             mode="single"
                             required
@@ -193,9 +193,9 @@ function CustomSnoozeDialog() {
                     >
                       <Label htmlFor={`${id}-amount`}>{t("Snooze for")}</Label>
                       <NumberFieldGroup>
-                        <NumberFieldDecrement aria-label={t(t("Decrease duration"))} />
+                        <NumberFieldDecrement aria-label={t("Decrease duration")} />
                         <NumberFieldInput required />
-                        <NumberFieldIncrement aria-label={t(t("Increase duration"))} />
+                        <NumberFieldIncrement aria-label={t("Increase duration")} />
                       </NumberFieldGroup>
                     </NumberField>
                     <Label className="flex min-w-0 flex-col items-stretch" htmlFor={`${id}-unit`}>

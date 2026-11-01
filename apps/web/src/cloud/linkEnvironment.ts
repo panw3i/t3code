@@ -31,6 +31,7 @@ import {
   reportRelayClientInstallProgress,
   requestRelayClientInstallConfirmation,
 } from "./relayClientInstallDialog";
+import { t } from "~/i18n";
 
 function relayUrl(): string | null {
   return resolveCloudPublicConfig().relayUrl;
@@ -59,7 +60,10 @@ const ensureRelayClientAvailable = Effect.fn("linkEnvironment.ensureRelayClientA
     if (status.status === "available") return;
     if (status.status === "unsupported") {
       return yield* new CloudEnvironmentLinkError({
-        message: `T3 Code cannot install the relay client automatically on ${status.platform}-${status.arch}.`,
+        message: t("T3 Code cannot install the relay client automatically on {platform}-{arch}.", {
+          platform: status.platform,
+          arch: status.arch,
+        }),
       });
     }
 
@@ -69,7 +73,7 @@ const ensureRelayClientAvailable = Effect.fn("linkEnvironment.ensureRelayClientA
     });
     if (!confirmed) {
       return yield* new CloudEnvironmentLinkError({
-        message: "Relay client installation was cancelled.",
+        message: t("Relay client installation was cancelled."),
       });
     }
 
@@ -87,7 +91,7 @@ const ensureRelayClientAvailable = Effect.fn("linkEnvironment.ensureRelayClientA
       );
     if (Option.isNone(installed) || installed.value.type !== "complete") {
       return yield* new CloudEnvironmentLinkError({
-        message: "The relay client install completed without a final status.",
+        message: t("The relay client install completed without a final status."),
       });
     }
     const installedStatus = installed.value.status;
@@ -95,8 +99,11 @@ const ensureRelayClientAvailable = Effect.fn("linkEnvironment.ensureRelayClientA
       return yield* new CloudEnvironmentLinkError({
         message:
           installedStatus.status === "unsupported"
-            ? `T3 Code cannot install the relay client automatically on ${installedStatus.platform}-${installedStatus.arch}.`
-            : "The relay client is still unavailable after installation.",
+            ? t("T3 Code cannot install the relay client automatically on {platform}-{arch}.", {
+                platform: installedStatus.platform,
+                arch: installedStatus.arch,
+              })
+            : t("The relay client is still unavailable after installation."),
       });
     }
   },
@@ -164,12 +171,12 @@ function ensureLinkedEnvironmentMatches(input: {
 }): Effect.Effect<void, CloudEnvironmentLinkError> {
   if (input.link.environmentId !== input.expectedEnvironmentId) {
     return new CloudEnvironmentLinkError({
-      message: "Relay returned credentials for a different environment.",
+      message: t("Relay returned credentials for a different environment."),
     });
   }
   if (input.link.endpoint.providerKind !== input.expectedProviderKind) {
     return new CloudEnvironmentLinkError({
-      message: "Relay returned credentials for a different endpoint provider.",
+      message: t("Relay returned credentials for a different endpoint provider."),
     });
   }
   return Effect.void;

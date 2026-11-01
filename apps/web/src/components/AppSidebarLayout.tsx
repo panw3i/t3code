@@ -458,7 +458,7 @@ export function AppSidebarLayout({ children }: { children: ReactNode }) {
           data-app-sidebar=""
           {...sidebarArea}
           role="navigation"
-          aria-label={t(t("Threads"))}
+          aria-label={t("Threads")}
           resizable={{
             maxWidth: sidebarMaximumWidth,
             minWidth: sidebarMinimumWidth,
