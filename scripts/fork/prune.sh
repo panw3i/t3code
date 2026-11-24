@@ -5,12 +5,12 @@ set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 grep -v -e '^[[:space:]]*#' -e '^[[:space:]]*$' .fork/removed-paths.txt | while IFS= read -r spec; do
-  git rm -r -q --ignore-unmatch -- "$spec"
+  git rm -r -f -q --ignore-unmatch -- "$spec"
 done
 
 git ls-files -- .github/workflows | sort -u | while IFS= read -r file; do
   case "$(basename "$file")" in
     fork-*) ;;
-    *) git rm -q --ignore-unmatch -- "$file" ;;
+    *) git rm -f -q --ignore-unmatch -- "$file" ;;
   esac
 done
